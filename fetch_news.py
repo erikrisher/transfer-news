@@ -37,7 +37,15 @@ FEEDS = [
     "https://www.theguardian.com/football/rss",
     "https://feeds.bbci.co.uk/sport/football/rss.xml",
     "https://www.skysports.com/rss/12040",
+    # Transfermarkt stories (indexed via Google News -- reliable, no scraping)
+    "https://news.google.com/rss/search?q=transfer+site:transfermarkt.com&hl=en-GB&gl=GB&ceid=GB:en",
+    # Journalist scoops aggregated via Google News
+    "https://news.google.com/rss/search?q=%22Fabrizio+Romano%22+OR+%22David+Ornstein%22+transfer&hl=en-GB&gl=GB&ceid=GB:en",
 ]
+
+# Public Telegram channels to pull directly (parsed from the free t.me/s/ web
+# preview -- no app, no API key). Romano's official channel:
+TELEGRAM_CHANNELS = [("fabrizioromanotg", "Fabrizio Romano")]
 
 # ---------------------------------------------------------------------------
 # 2. TRANSFER FILTER + CLUB / TIER RULES
@@ -122,6 +130,29 @@ GENERIC_STOP.update({
     "race", "chase", "hunt", "battle", "picture", "gallery", "explained",
     "the", "a", "an", "and", "or", "for", "with", "from", "into", "over",
     "la", "el", "los", "las",
+    # modal / filler verbs that appear in Title-Case headlines
+    "must", "now", "decide", "decides", "decided", "should", "will", "can",
+    "may", "might", "shall", "let", "get", "gets", "got", "make", "makes",
+    "made", "take", "takes", "put", "puts", "keep", "keeps", "hold", "holds",
+    "land", "lands", "but", "not", "yet", "still", "after", "before", "amid",
+    "despite", "while", "where", "which", "that", "this", "these", "those",
+    "there", "then", "than", "as", "at", "on", "in", "to", "of", "by", "no",
+    # newspapers / agencies / publisher words
+    "east", "west", "north", "south", "anglian", "daily", "times", "post",
+    "chronicle", "gazette", "herald", "echo", "weekly", "online", "yahoo",
+    "espn", "talksport", "metro", "independent", "observer", "reach", "wire",
+    "press", "reuters", "afp", "pa", "goal", "fourfourtwo", "caughtoffside",
+    "givemesport", "football365", "hits", "radio",
+    # club nicknames (the club tile already covers these)
+    "reds", "blues", "gunners", "hammers", "toffees", "citizens", "cottagers",
+    "magpies", "villans", "clarets", "bees", "saints", "hornets", "eagles",
+    "foxes", "canaries", "potters", "rams", "owls", "blades", "terriers",
+    "wanderers", "rovers", "albion", "town", "county", "boys", "lions",
+    "whites", "tractor", "trotters", "seagulls", "cherries", "hatters",
+    # other sports that leak into feeds
+    "scottish", "open", "golf", "tennis", "cricket", "rugby", "nba", "nfl",
+    "formula", "boxing", "ufc", "masters", "wimbledon", "ryder", "pga",
+    "olympics", "olympic", "grand", "prix", "mcilroy",
     # countries / nationalities (also handled via possessive stripping)
     "spain", "italy", "france", "germany", "portugal", "brazil", "argentina",
     "netherlands", "belgium", "croatia", "uruguay", "colombia", "mexico",
@@ -273,6 +304,47 @@ def extract_image(item, desc):
     return m.group(1) if m else None
 
 
+def clean_google_title(title):
+    """Google News appends ' - Publisher' to every headline. Strip it so the
+    publisher name isn't mistaken for a player/club."""
+    return re.sub(r"\s+[-–]\s+[^-–]+$", "", title).strip()
+
+
+def fetch_telegram(channel, source):
+    """Parse a public Telegram channel's web preview (t.me/s/<channel>) into
+    story dicts. Returns [] on any failure so the page never breaks."""
+    out = []
+    try:
+        html_text = fetch(f"https://t.me/s/{channel}").decode("utf-8", "ignore")
+    except Exception as e:
+        print(f"  skipped telegram (error): {channel}  ->  {e}")
+        return out
+    # Split the page into per-message chunks.
+    for chunk in re.split(r'(?=data-post=")', html_text)[1:]:
+        pid = re.search(r'data-post="([^"]+)"', chunk)
+        body = re.search(
+            r'<div class="tgme_widget_message_text[^"]*"[^>]*>(.*?)</div>',
+            chunk, re.S)
+        if not pid or not body:
+            continue
+        text = re.sub(r'<br\s*/?>', " ", body.group(1))
+        text = html.unescape(re.sub(r"<[^>]+>", "", text)).strip()
+        text = re.sub(r"\s+", " ", text)
+        if not text or not is_transfer(text):
+            continue
+        dt = re.search(r'<time[^>]*datetime="([^"]+)"', chunk)
+        try:
+            date = datetime.fromisoformat(dt.group(1)) if dt else datetime.now(timezone.utc)
+        except Exception:
+            date = datetime.now(timezone.utc)
+        out.append({
+            "title": text[:150] + ("…" if len(text) > 150 else ""),
+            "link": f"https://t.me/{pid.group(1)}", "date": date,
+            "source": source, "text": text, "image": None,
+        })
+    return out
+
+
 def collect():
     stories = []
     for url in FEEDS:
@@ -281,8 +353,11 @@ def collect():
         except Exception as e:
             print(f"  skipped feed (error): {url}  ->  {e}")
             continue
+        is_google = "news.google" in url
         for item in root.findall(".//item"):
             title = (item.findtext("title") or "").strip()
+            if is_google:
+                title = clean_google_title(title)
             link = (item.findtext("link") or "").strip()
             desc = (item.findtext("description") or "").strip()
             if not title or not link or not is_transfer(f"{title} {desc}"):
@@ -292,6 +367,8 @@ def collect():
                 "source": source_name(url), "text": f"{title} {desc}",
                 "image": extract_image(item, desc),
             })
+    for channel, source in TELEGRAM_CHANNELS:
+        stories.extend(fetch_telegram(channel, source))
     return stories
 
 
@@ -446,23 +523,9 @@ def esc(x):
 
 
 def render_tile(g, rank):
-    # Size tier: the top subject in each column is a big "hero" tile, the next
-    # couple are medium, the rest are compact -- this is what breaks the grid.
-    size = "hero" if rank == 0 else ("mid" if rank <= 2 else "mini")
-
-    # Stable per-tile jitter (from the label) for uneven widths / spacing / tilt.
-    h = int(hashlib.md5(g["label"].encode("utf-8")).hexdigest(), 16)
-    if size == "hero":
-        style = "width:100%;margin-bottom:24px;"
-    else:
-        w = [100, 95, 90][h % 3]
-        mb = [14, 24, 34][(h // 3) % 3]
-        align = "" if w == 100 else (
-            "margin-left:auto;" if (h // 9) % 2 else "margin-right:auto;")
-        tilt = [-0.9, 0, 0.8][(h // 27) % 3] if size == "mini" else 0
-        style = f"width:{w}%;margin-bottom:{mb}px;{align}"
-        if tilt:
-            style += f"transform:rotate({tilt}deg);"
+    # The top (most-covered) subject in each column is the big "hero" tile.
+    # Every other tile is uniform width; its HEIGHT grows with article count.
+    size = "hero" if rank == 0 else "std"
 
     if g["img"]:
         cls = "crest" if g["img_type"] == "crest" else "photo"
@@ -485,8 +548,10 @@ def render_tile(g, rank):
     if size == "hero":
         summary = f'<summary>{thumb}<span class="hrow">{name}{badge}</span></summary>'
     else:
-        summary = f'<summary>{thumb}{name}{badge}</summary>'
-    return (f'<details class="tile {size}" style="{style}">{summary}'
+        # Collapsed height scales with how many articles mention this subject.
+        minh = min(58 + (len(g["arts"]) - 1) * 18, 152)
+        summary = f'<summary style="min-height:{minh}px">{thumb}{name}{badge}</summary>'
+    return (f'<details class="tile {size}">{summary}'
             f'<div class="links">{links}</div></details>')
 
 
@@ -531,11 +596,12 @@ def build_html(by_tier):
   .other  {{ --accent:#2b3a67; --accentText:#2b3a67; --glow:52,68,120; }}
 
   .tile {{ position:relative; background:var(--tile); border-radius:14px;
-    margin-bottom:17px; border:1px solid rgba(0,0,0,.05);
-    box-shadow:0 12px 22px -8px rgba(var(--glow),.55), 0 2px 5px rgba(0,0,0,.05); }}
-  .tile::after {{ content:""; position:absolute; left:16px; right:16px; bottom:-3px;
-    height:5px; border-radius:6px; background:var(--accent); filter:blur(3px);
-    opacity:.85; }}
+    margin-bottom:20px; border:1px solid rgba(var(--glow),.35);
+    box-shadow:
+      0 0 0 1px rgba(var(--glow),.55),
+      0 0 14px 1px rgba(var(--glow),.55),
+      0 0 30px 5px rgba(var(--glow),.26),
+      0 3px 8px rgba(0,0,0,.05); }}
   .tile > summary {{ list-style:none; cursor:pointer; display:flex;
     align-items:center; gap:12px; padding:12px 14px; }}
   .tile > summary::-webkit-details-marker {{ display:none; }}
@@ -559,10 +625,13 @@ def build_html(by_tier):
   .lhead {{ display:block; font-size:13px; line-height:1.4; color:var(--ink); }}
   .lmeta {{ display:block; font-size:11px; color:var(--muted); margin-top:2px; }}
   .empty {{ color:var(--muted); font-size:14px; text-align:center; padding:12px 0; }}
-  .tile:hover {{ box-shadow:0 16px 30px -8px rgba(var(--glow),.72),
-    0 2px 6px rgba(0,0,0,.07); }}
+  .tile:hover {{ box-shadow:
+      0 0 0 1px rgba(var(--glow),.8),
+      0 0 18px 2px rgba(var(--glow),.72),
+      0 0 42px 8px rgba(var(--glow),.34),
+      0 3px 10px rgba(0,0,0,.07); }}
 
-  /* --- mosaic size variants (uneven patchwork) --- */
+  /* hero = biggest tile at the top of each column */
   .tile.hero > summary {{ flex-direction:column; align-items:stretch; gap:0;
     padding:0; }}
   .tile.hero .thumb {{ width:100%; height:152px; border-radius:14px 14px 0 0;
@@ -571,10 +640,6 @@ def build_html(by_tier):
     padding:12px 15px; }}
   .tile.hero .tname {{ flex:1; font-size:16.5px; }}
   .tile.hero .links {{ padding-left:16px; }}
-  .tile.mini > summary {{ padding:9px 12px; gap:10px; }}
-  .tile.mini .thumb {{ width:38px; height:38px; font-size:13px; border-radius:9px; }}
-  .tile.mini .tname {{ font-size:13.5px; }}
-  .tile.mini .links {{ padding-left:60px; }}
 </style>
 </head>
 <body>
