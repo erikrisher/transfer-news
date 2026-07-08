@@ -14,8 +14,11 @@ Pure Python standard library -- no pip installs required.
 Runs on a daily schedule via GitHub Actions (see .github/workflows/update.yml).
 """
 
+import hashlib
 import html
+import json
 import re
+import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from collections import Counter
@@ -220,6 +223,32 @@ def source_name(url):
     return "News"
 
 
+MEDIA = "{http://search.yahoo.com/mrss/}"
+
+
+def extract_image(item, desc):
+    """Find a photo URL for a story from the RSS item, if the feed provides one."""
+    best, best_w = None, -1
+    for tag in (MEDIA + "content", MEDIA + "thumbnail"):
+        for el in item.findall(tag):
+            url = el.get("url")
+            if not url:
+                continue
+            typ = el.get("type", "")
+            if typ and not typ.startswith("image"):
+                continue
+            w = int(el.get("width") or 0)
+            if w > best_w:
+                best, best_w = url, w
+    if best:
+        return best
+    enc = item.find("enclosure")
+    if enc is not None and enc.get("type", "").startswith("image") and enc.get("url"):
+        return enc.get("url")
+    m = re.search(r'<img[^>]+src="([^"]+)"', desc or "")
+    return m.group(1) if m else None
+
+
 def collect():
     stories = []
     for url in FEEDS:
@@ -237,6 +266,7 @@ def collect():
             stories.append({
                 "title": title, "link": link, "date": parse_date(item),
                 "source": source_name(url), "text": f"{title} {desc}",
+                "image": extract_image(item, desc),
             })
     return stories
 
@@ -283,20 +313,20 @@ def group_stories(stories):
     # or to every club it mentions if no player was found.
     groups = {}
 
-    def add(key, label, story):
-        groups.setdefault(key, {"label": label, "arts": []})["arts"].append(story)
+    def add(key, label, kind, story):
+        groups.setdefault(key, {"label": label, "kind": kind, "arts": []})["arts"].append(story)
 
     for s in stories:
         if s["surnames"]:
             for sn in s["surnames"]:
                 counts = fullname_for.get(sn)
                 label = counts.most_common(1)[0][0] if counts else sn.title()
-                add(("player", sn), label, s)
+                add(("player", sn), label, "player", s)
         elif s["clubs"]:
             for disp, _tier in s["clubs"]:
-                add(("club", disp), disp, s)
+                add(("club", disp), disp, "club", s)
         else:
-            add(("general",), "General transfer news", s)
+            add(("general",), "General transfer news", "general", s)
 
     # Sort into tiers.  A group's tier = its highest-priority article.
     by_tier = {TIER_MAN_UTD: [], TIER_PL: [], TIER_OTHER: []}
@@ -312,7 +342,70 @@ def group_stories(stories):
 
 
 # ---------------------------------------------------------------------------
-# 6. BUILD THE HTML PAGE
+# 6. IMAGES: player thumbnails, club crests, colored-initials fallback
+# ---------------------------------------------------------------------------
+# Better search terms for the free crest lookup (TheSportsDB).
+CREST_QUERY = {
+    "Wolves": "Wolverhampton Wanderers", "PSG": "Paris Saint-Germain",
+    "Inter Milan": "Inter Milan", "Tottenham": "Tottenham Hotspur",
+    "West Ham": "West Ham United", "Atletico Madrid": "Atletico Madrid",
+    "RB Leipzig": "RB Leipzig", "Bayer Leverkusen": "Bayer Leverkusen",
+}
+
+
+def avatar_color(name):
+    """Stable, pleasant color derived from a name (for the initials badge)."""
+    h = int(hashlib.md5(name.encode("utf-8")).hexdigest(), 16) % 360
+    return f"hsl({h}, 45%, 48%)"
+
+
+def initials_for(g):
+    if g["kind"] == "general":
+        return "TN"
+    words = [w for w in re.split(r"[\s\-]+", g["label"]) if w and w[0].isalpha()]
+    if len(words) >= 2:
+        return (words[0][0] + words[1][0]).upper()
+    return g["label"][:2].upper()
+
+
+def get_crest(display, memo):
+    """Look up a club crest URL from the free TheSportsDB API. Returns None on
+    any failure so the tile falls back to clean initials -- never breaks."""
+    if display in memo:
+        return memo[display]
+    query = CREST_QUERY.get(display, display)
+    url = None
+    try:
+        api = ("https://www.thesportsdb.com/api/v1/json/3/searchteams.php?t="
+               + urllib.parse.quote(query))
+        req = urllib.request.Request(api, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=12) as r:
+            teams = (json.loads(r.read()).get("teams") or [])
+        if teams:
+            url = teams[0].get("strBadge") or teams[0].get("strTeamBadge")
+    except Exception:
+        url = None
+    memo[display] = url
+    return url
+
+
+def resolve_images(by_tier):
+    memo = {}
+    for groups in by_tier.values():
+        for g in groups:
+            g["initials"] = initials_for(g)
+            g["color"] = avatar_color(g["label"])
+            if g["kind"] == "club":
+                g["img"], g["img_type"] = get_crest(g["label"], memo), "crest"
+            elif g["kind"] == "player":
+                g["img"] = next((a["image"] for a in g["arts"] if a.get("image")), None)
+                g["img_type"] = "photo"
+            else:
+                g["img"], g["img_type"] = None, "photo"
+
+
+# ---------------------------------------------------------------------------
+# 7. BUILD THE HTML PAGE
 # ---------------------------------------------------------------------------
 def when(d):
     mins = int((datetime.now(timezone.utc) - d).total_seconds() // 60)
@@ -328,31 +421,37 @@ def esc(x):
     return html.escape(x)
 
 
-def render_group(g):
-    arts = g["arts"]
+def render_tile(g):
+    if g["img"]:
+        cls = "crest" if g["img_type"] == "crest" else "photo"
+        imgtag = (f'<img class="{cls}" src="{esc(g["img"])}" loading="lazy" '
+                  f'alt="" onerror="this.remove()">')
+    else:
+        imgtag = ""
+    thumb = (f'<span class="thumb" style="background:{g["color"]}">'
+             f'{esc(g["initials"])}{imgtag}</span>')
     links = "".join(
         f'<a href="{esc(a["link"])}" target="_blank" rel="noopener">'
         f'<span class="lhead">{esc(a["title"])}</span>'
         f'<span class="lmeta">{esc(a["source"])} &middot; {when(a["date"])}</span></a>'
-        for a in arts[:12]
+        for a in g["arts"][:12]
     )
     return (
-        '<details class="group">'
-        '<summary><span class="chev">&rsaquo;</span>'
-        f'<span class="name">{esc(g["label"])}</span>'
-        f'<span class="badge">{len(arts)}</span>'
-        f'<span class="gtime">{when(g["latest"])}</span></summary>'
+        '<details class="tile"><summary>'
+        f'{thumb}'
+        f'<span class="tname">{esc(g["label"])}<small>{when(g["latest"])}</small></span>'
+        f'<span class="badge">{len(g["arts"])}</span></summary>'
         f'<div class="links">{links}</div></details>'
     )
 
 
-def render_tier(title, sub, cls, groups):
+def render_column(title, sub, cls, groups):
     if not groups:
-        body = '<div class="empty">Nothing new here right now &mdash; check back later.</div>'
+        body = '<div class="empty">Nothing new here yet.</div>'
     else:
-        body = "\n".join(render_group(g) for g in groups[:40])
-    return (f'<section class="tier {cls}"><h2>{title} '
-            f'<span class="sub">{sub}</span></h2>{body}</section>')
+        body = "\n".join(render_tile(g) for g in groups[:60])
+    return (f'<section class="column {cls}"><div class="colhead">'
+            f'<h2>{title}</h2><span class="sub">{sub}</span></div>{body}</section>')
 
 
 def build_html(by_tier):
@@ -364,69 +463,69 @@ def build_html(by_tier):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Transfer News</title>
 <style>
-  :root {{ --bg:#0b0d12; --card:#151922; --text:#e8ebf2; --muted:#8b93a7;
-    --utd:#e01a2b; --line:#222836; }}
+  :root {{ --bg:#e9e3d5; --tile:#ffffff; --ink:#20242c; --muted:#727889;
+    --line:#eceef2; }}
   * {{ box-sizing:border-box; }}
-  body {{ margin:0; background:var(--bg); color:var(--text);
+  body {{ margin:0; background:var(--bg); color:var(--ink);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    padding:20px 16px 60px; }}
-  header,main {{ max-width:760px; margin:0 auto; }}
-  h1 {{ font-size:26px; margin:0 0 4px; letter-spacing:.5px; }}
+    padding:26px 18px 70px; }}
+  .top {{ text-align:center; margin:0 auto 28px; }}
+  h1 {{ font-size:27px; margin:0 0 6px; letter-spacing:.5px; }}
   .updated {{ color:var(--muted); font-size:13px; }}
-  .legend {{ display:flex; gap:16px; flex-wrap:wrap; font-size:12px;
-    color:var(--muted); margin:12px 0 4px; }}
-  .dot {{ display:inline-block; width:10px; height:10px; border-radius:50%;
-    margin-right:5px; vertical-align:middle; }}
-  .tier {{ margin-top:30px; }}
-  .tier h2 {{ font-size:17px; margin:0 0 12px; text-transform:uppercase;
-    letter-spacing:1px; }}
-  .tier h2 .sub {{ text-transform:none; letter-spacing:0; color:var(--muted);
-    font-weight:400; font-size:13px; margin-left:6px; }}
-  details.group {{ background:var(--card); border-radius:10px; margin-bottom:10px;
-    border-left:4px solid transparent; }}
-  details.group > summary {{ list-style:none; cursor:pointer; padding:13px 16px;
-    display:flex; align-items:center; gap:10px; }}
-  details.group > summary::-webkit-details-marker {{ display:none; }}
-  .chev {{ color:var(--muted); font-size:18px; transition:transform .15s ease;
-    display:inline-block; }}
-  details[open] .chev {{ transform:rotate(90deg); }}
-  .name {{ flex:1; font-weight:600; font-size:15px; }}
-  .badge {{ background:#2a3040; color:#c7cede; border-radius:999px;
-    padding:2px 9px; font-size:12px; }}
-  .gtime {{ color:var(--muted); font-size:12px; white-space:nowrap; }}
-  .links {{ padding:0 16px 8px 40px; }}
-  .links a {{ display:block; padding:9px 0; border-top:1px solid var(--line);
-    color:var(--text); text-decoration:none; }}
-  .links a:hover .lhead {{ color:#fff; }}
-  .lhead {{ display:block; font-size:14px; line-height:1.4; }}
-  .lmeta {{ display:block; color:var(--muted); font-size:12px; margin-top:3px; }}
-  .empty {{ color:var(--muted); font-size:14px; padding:8px 0; }}
+  .board {{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px;
+    max-width:1240px; margin:0 auto; align-items:start; }}
+  @media (max-width:920px) {{ .board {{ grid-template-columns:1fr; }} }}
+  .colhead {{ text-align:center; margin-bottom:18px; }}
+  .column h2 {{ margin:0; font-size:15px; letter-spacing:1.5px;
+    text-transform:uppercase; display:inline-block; padding:0 0 5px;
+    border-bottom:3px solid var(--accent); color:var(--accentText); }}
+  .colhead .sub {{ display:block; color:var(--muted); font-size:12px; margin-top:7px; }}
 
-  .utd details.group {{ border-left-color:var(--utd);
-    box-shadow:0 0 14px rgba(224,26,43,.30); }}
-  .utd h2 {{ color:var(--utd); }}
-  .pl details.group {{ border-left-color:#fff;
-    box-shadow:0 0 14px rgba(255,255,255,.20); }}
-  .pl h2 {{ color:#fff; }}
-  .other details.group {{ border-left-color:#38405a; }}
-  .other h2 {{ color:var(--muted); }}
+  .utd    {{ --accent:#e01a2b; --accentText:#c0121f; --glow:224,26,43; }}
+  .pl     {{ --accent:#b9c2d6; --accentText:#6b7488; --glow:150,168,205; }}
+  .other  {{ --accent:#2b3a67; --accentText:#2b3a67; --glow:52,68,120; }}
+
+  .tile {{ position:relative; background:var(--tile); border-radius:14px;
+    margin-bottom:17px; border:1px solid rgba(0,0,0,.05);
+    box-shadow:0 12px 22px -8px rgba(var(--glow),.55), 0 2px 5px rgba(0,0,0,.05); }}
+  .tile::after {{ content:""; position:absolute; left:16px; right:16px; bottom:-3px;
+    height:5px; border-radius:6px; background:var(--accent); filter:blur(3px);
+    opacity:.85; }}
+  .tile > summary {{ list-style:none; cursor:pointer; display:flex;
+    align-items:center; gap:12px; padding:12px 14px; }}
+  .tile > summary::-webkit-details-marker {{ display:none; }}
+  .thumb {{ position:relative; width:46px; height:46px; flex:0 0 auto;
+    border-radius:11px; overflow:hidden; display:flex; align-items:center;
+    justify-content:center; color:#fff; font-weight:700; font-size:15px; }}
+  .thumb img.photo {{ position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; }}
+  .thumb img.crest {{ position:absolute; inset:0; width:100%; height:100%;
+    object-fit:contain; background:#fff; padding:4px; }}
+  .tname {{ flex:1; font-weight:600; font-size:14.5px; color:var(--ink);
+    line-height:1.25; }}
+  .tname small {{ display:block; font-weight:400; color:var(--muted);
+    font-size:11.5px; margin-top:2px; }}
+  .badge {{ flex:0 0 auto; background:#f0f1f5; color:#586074; border-radius:999px;
+    padding:3px 10px; font-size:12px; font-weight:600; }}
+  .links {{ padding:2px 16px 12px 72px; }}
+  .links a {{ display:block; padding:9px 0; border-top:1px solid var(--line);
+    text-decoration:none; }}
+  .links a:hover .lhead {{ color:#000; }}
+  .lhead {{ display:block; font-size:13px; line-height:1.4; color:var(--ink); }}
+  .lmeta {{ display:block; font-size:11px; color:var(--muted); margin-top:2px; }}
+  .empty {{ color:var(--muted); font-size:14px; text-align:center; padding:12px 0; }}
 </style>
 </head>
 <body>
-  <header>
+  <div class="top">
     <h1>&#9917; Transfer News</h1>
-    <div class="updated">Updated {updated} &middot; tap a name to see its stories</div>
-    <div class="legend">
-      <span><span class="dot" style="background:var(--utd)"></span>Man Utd</span>
-      <span><span class="dot" style="background:#fff"></span>Premier League</span>
-      <span><span class="dot" style="background:#38405a"></span>Other / general</span>
-    </div>
-  </header>
-  <main>
-{render_tier('&#128308; Manchester United', 'top priority', 'utd', by_tier[TIER_MAN_UTD])}
-{render_tier('&#9898; Premier League', 'the rest of the PL', 'pl', by_tier[TIER_PL])}
-{render_tier('&#127758; Other Top-5 Leagues &amp; General', 'La Liga, Serie A, Bundesliga, Ligue 1 &amp; more', 'other', by_tier[TIER_OTHER])}
-  </main>
+    <div class="updated">Updated {updated} &middot; tap a tile to see its stories</div>
+  </div>
+  <div class="board">
+{render_column('Manchester United', 'top priority', 'utd', by_tier[TIER_MAN_UTD])}
+{render_column('Premier League', 'the rest of the PL', 'pl', by_tier[TIER_PL])}
+{render_column('Other &amp; General', 'La Liga, Serie A, Bundesliga, Ligue 1 &amp; more', 'other', by_tier[TIER_OTHER])}
+  </div>
 </body>
 </html>"""
 
@@ -436,6 +535,7 @@ def main():
     stories = dedupe(collect())
     print(f"Kept {len(stories)} transfer stories.")
     by_tier = group_stories(stories)
+    resolve_images(by_tier)
     n_groups = sum(len(v) for v in by_tier.values())
     print(f"Grouped into {n_groups} subjects.")
     with open("index.html", "w", encoding="utf-8") as f:
