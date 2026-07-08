@@ -1,0 +1,36 @@
+name: Update transfer news
+
+# WHEN this runs:
+on:
+  schedule:
+    - cron: "0 6 * * *"    # every day at 06:00 UTC (early morning)
+    - cron: "0 16 * * *"   # and again at 16:00 UTC (afternoon)
+  workflow_dispatch:        # + a manual "Run workflow" button in the Actions tab
+
+# Allow the job to commit the refreshed page back to the repo:
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch the latest transfer news
+        run: python fetch_news.py
+
+      - name: Save the updated page
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add index.html
+          # Only commit if something actually changed:
+          git diff --staged --quiet || git commit -m "Update transfer news"
+          git push
