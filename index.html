@@ -5,18 +5,492 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Transfer News</title>
 <style>
-  body { margin:0; background:#0b0d12; color:#e8ebf2; padding:60px 20px;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    text-align:center; }
-  h1 { font-size:28px; }
-  p { color:#8b93a7; max-width:480px; margin:12px auto; line-height:1.5; }
+  :root {
+    --bg: #0b0d12; --card: #151922; --text: #e8ebf2; --muted: #8b93a7;
+    --utd: #e01a2b; --pl: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    padding: 20px 16px 60px;
+  }
+  header { max-width: 760px; margin: 0 auto 8px; }
+  h1 { font-size: 26px; margin: 0 0 4px; letter-spacing: .5px; }
+  .updated { color: var(--muted); font-size: 13px; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px;
+    color: var(--muted); margin: 12px 0 4px; }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+    margin-right: 5px; vertical-align: middle; }
+  main { max-width: 760px; margin: 0 auto; }
+  .tier { margin-top: 30px; }
+  .tier h2 { font-size: 17px; margin: 0 0 12px; text-transform: uppercase;
+    letter-spacing: 1px; }
+  .tier h2 .sub { text-transform: none; letter-spacing: 0; color: var(--muted);
+    font-weight: 400; font-size: 13px; margin-left: 6px; }
+  .card { display: block; background: var(--card); text-decoration: none;
+    color: var(--text); padding: 14px 16px; border-radius: 10px;
+    margin-bottom: 10px; border-left: 4px solid transparent;
+    transition: transform .08s ease; }
+  .card:hover { transform: translateX(3px); }
+  .headline { font-size: 15px; line-height: 1.4; font-weight: 500; }
+  .meta { color: var(--muted); font-size: 12px; margin-top: 6px; }
+  .empty { color: var(--muted); font-size: 14px; padding: 8px 0; }
+
+  /* Manchester United -- red neon glow */
+  .utd .card { border-left-color: var(--utd);
+    box-shadow: 0 0 14px rgba(224,26,43,.32); }
+  .utd h2 { color: var(--utd); }
+  /* Premier League -- white neon glow */
+  .pl .card { border-left-color: var(--pl);
+    box-shadow: 0 0 14px rgba(255,255,255,.22); }
+  .pl h2 { color: var(--pl); }
+  /* Everything else -- calm, no glow */
+  .other .card { border-left-color: #38405a; }
+  .other h2 { color: var(--muted); }
 </style>
 </head>
 <body>
-  <h1>&#9917; Transfer News</h1>
-  <p>Your page is set up! The news feed appears here automatically after the
-  first daily update runs.</p>
-  <p>To fill it in right now, go to the <b>Actions</b> tab in your GitHub
-  repository and run the &ldquo;Update transfer news&rdquo; workflow once.</p>
+  <header>
+    <h1>&#9917; Transfer News</h1>
+    <div class="updated">Updated Wed 08 Jul 2026, 22:24 UTC</div>
+    <div class="legend">
+      <span><span class="dot" style="background:var(--utd)"></span>Man Utd</span>
+      <span><span class="dot" style="background:var(--pl)"></span>Premier League</span>
+      <span><span class="dot" style="background:#38405a"></span>Other / general</span>
+    </div>
+  </header>
+  <main>
+    <section class="tier utd">
+      <h2>&#128308; Manchester United <span class="sub">top priority</span></h2>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxOMC00eTB0ZGVxVzNCVy1tY0hiTjgxNG5LUEZHS09UZU5ySUdGMUV5dFAzemdQQkZwZzdWS2FFY0RrUlpRMk1uTFl1cVVGNERJYU9aMzFyeTBQSGtScXI4WjJwdTRCbTZUazZtSHI1d2JIWGpNd0R0NG1OMU9SM0c1T2N3T2FuN1VESi0zV2pldExXN21hd3B2ZFpzUVJ4cGxibDl2MklyNGtDWnfSAbABQVVfeXFMTnF3clAyVHNHSUNlMGE2TlFiUzhMeExZczlRTlN2ZjlaaWtVcDk4ZldxUDVyQURNdENQWHRIYXhrN2g4WjlVSXJ3RlZIY08zVlYtbjVjNkptZE9LSjl1T1VPYXJiU2JaMGxKMTJyMmFiQnNpWjYzbHZrSlJSTkpTbXY5cC1KOFMzdWFBd3g4WVZ4dGpMNFIwbU9zanBTaG5RYVRQb25WaXQ2b0hXdUNraEM?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Man United transfer news LIVE: Aurelien Tchouameni blow,
+Andrey Santos deal, Alex Scott latest - Manchester Evening News</div>
+        <div class="meta">Google News &middot; 29 min ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiiwJBVV95cUxQVmczZUNuYkRPOG5UMGctUDdrT2NHY3lBWkFaclM2UWxNYUtLMkNQMWRpRVQ5MHhvOTdBdi1VUTc5SmJpM3VzRVAzbE44cVI0cHF0SEJkWEF4YUV2N2hvc3ZWdmdMT2Q5REI5T0JPbGVtbXQ0WHI2Z190RTFJVTE4cXJZa0FJTlZPb014ZDJydXpMQWtuTVZwbXkzdXdYWWdROXhDVGtYejE0OGRqN3laQmU5RGNZTERKa3JLUFdORDJsZzQ2alVBWmhZcHVVOEVVR0ZrMmpfSWVyV280QjR1TWZQaHBNVGtHeVlWTnRxbkFuZ2ctYmZrZXhiMl9sbmtHRGxQYzhQWUlSSlU?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Guimaraes wants Arsenal deal, Man Utd launch Ryerson pursuit - Paper Round - TNT Sports</div>
+        <div class="meta">Google News &middot; 30 min ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMirgFBVV95cUxQODhvaUJuTDk5cEdma3ZlV29ISEZaNm8tNUszQmxfVzhsMWVIQVpWTXRzWkhaWENtUFQ3cHRBNnAxek9WdmZ0SHExU2pmaHJCQWppdnJIN3M2RHpJVlVuR1hoRDhEU0NsYTBnY29oXzUyb1pDSk9JQjRLamZBZVljTEV0Qy1ZVjRNWlRpQXpFeUU1Ym1hdktPcG9EVTFOXzZqWDVzTHpSNEM2NWxEN3c?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Man Utd &#x27;set date&#x27; to complete transfer as double medical booked - London Evening Standard</div>
+        <div class="meta">Google News &middot; 34 min ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMimAFBVV95cUxQeXZkMkZxX0JvRGsxRmdLRkhFQWJiNFFxdG9mQ28tUjA1cWZ1VnVzczNub2hsVm9HVWp5akM3dGJtYmlhVDRPREdTU01qZWp5a0hMNlh2RXc4OFdiVG0yekV4Sml0ZHVFLWpKbjZxVzFSZVNCTG5CeFlEZnVUUkY0TS0zLUJ3MnBvSjRDWjNydk8zSjhyQk9vVw?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Transfer news LIVE: Guimaraes to Arsenal shock, Man Utd strike £50m deal, Chelsea arrival confirmed - The Mirror</div>
+        <div class="meta">Google News &middot; 34 min ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMihwFBVV95cUxNdkY5ak9ZajkwM3VfOG94ZTRCbTZsdF8wSDZ3QkJJMFR3OHdKQzhRN2U4TjhRNDlsa1djSFdWX05PWHF2U2dMbEw1SlNxTXpRaXJYR1lXX3pvM1g4OUVPMnN3ZVlMX3Q3b1V3cWdXU2F5UDBNZkhPdlV4MF9aX3NOWV91RXVYak0?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Manchester United &#x27;set deadline&#x27; for Marcus Rashford transfer as double medical booked - Yahoo Sports Australia</div>
+        <div class="meta">Google News &middot; 34 min ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMizgFBVV95cUxPVkQ1dUMyWnFfci1aZ2RRRHc0QUhadGxfSEFfOWx0c2dpYVFKei1QVUxvM0l6NjFHeUtHSmdHcnl3d1l4VU5sY3pQYnJ2UjdtMmwtNHFoY2NfVlZVTkJ6MzhwMkZmMTNYYzViWkhLOVVDUlpqanJWOUU0RW8xX3kyaTRHLWtPNGxpbGRZODN5X25vRGhHWDJqZDU4WnQybHd2U1BWYlJ0Vm5VYnR0ZWJXOG96SzM1RGJ0S3ppWm96aVk2TlZUSkI3N2JKeW00dw?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Transfer news LIVE: Arsenal book medical; Man Utd to announce signing - London Evening Standard</div>
+        <div class="meta">Google News &middot; 38 min ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMipAFBVV95cUxQUENVMm8xQUEwUF91MVI5a1VpbGhWTktmSTN6Q3pjUkc1dV9fWkpDQ0tmSzAyTjBqZ0tjd09XRUEyQmdDNWNsMlpqQ1dySXloMzd1ekxqOTQ2al9hUml3OFBiQTZZY1pfZEJGTXFlZ0xiMFBfLUR3QWNaU3NfcVczajJUcHRvUm90QWhRaVN0dHF1d2oxelZNUFdlUTJCRUFxZllzbg?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Aurelien Tchouameni ‘reaches agreement’ and picks between Man Utd and Real Madrid - Football365</div>
+        <div class="meta">Google News &middot; 51 min ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMikAFBVV95cUxQZzBmTWpnd0VnRzdCLVZBaDZDV0ZQeDVPelZ4ZFNMcklmTjJNYXo2c1BHdDgzOV9XNkpKanZzRU94OHVIdUl5RnlKeHYxUlhJMTlWcGp2S3JqOUprRzVDRms5eVhQaW1sYV9qSmpOVTFnRGRJZlMyM3dyMFlybnZkRnFVbExsQVpLR2hVOFp4VnA?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Man Utd set for cash injection to fund transfers as &#x27;contract accepted&#x27; - London Evening Standard</div>
+        <div class="meta">Google News &middot; 1 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMi0wFBVV95cUxOekRjRzBwMy0tN2dHZzlKUV9rdzE3UDhVVWR1b3N3TEhLYk03d00yeVNwa3lQc0RBRXdQQWVyaEhuOTQ2V2J2bVU1Q1lrczEyVmt5UnNVM1pLTnVuMjZwRjJhRjdEY1BTQUUyMFJpMzgwSEtUTWRPOGxnem14VmFhTVIxeUQ3OEc0S08zRElOZlFHSW1LOHBsbHRYd0ZmV2E5MUtqdGxVN2FVVzlmeUlWdkxwMWdtSl9vd2pjTkh2Vnh0NDU5ZV96OTZmR292WDQ0UTRF?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Andrey Santos: Manchester United agree £50m deal for Chelsea and Brazil midfielder - Sky Sports</div>
+        <div class="meta">Google News &middot; 1 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiswFBVV95cUxOVG93R2VEZ3cyWUpuUHd6dkdIdXBGLTVKY0lxdjFLSV9PQlZtT0g3aUp2VXlvZUtKRGthT0pfUllpeGNPcFFqZnFIOFQtZVBTVmNJN2xMZlpPRTZvS2FmNjdvcmdxV0tYOExuVXpZZHB4SDZHQWFhNnhQR0xpVGpmMTg0VTlGWldJMG1oOHNTaDYzUmpGMm9PQk5xSmF0RHBUeldOeHluUVZ4TmtQMUdRQUhkSdIBuAFBVV95cUxNQ2lOR3dkUmhfcE5kamk3eDhNVlRrTGUzdDg1bWVWRllqQVI3Tl9LNkZoR0p1UWFUaG9NSnlIZjIyTE85MEsxZUV1RFU3T2VRVHF0TG5hcG5rTmt2aFFBQVp5dHlZSERISkRUbXFfV0NjYXhEbHZRSXJaYk9jaG9ucHRNX0VZYTZ3STF0Z08wOW5RR1RCMFlKYWZqbi1uSGhzMzFVM0tyMHRIYkdPTDZ2aEh6WUZzR243?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Mason Greenwood transfer update as Man United budget set for boost ahead of £50m signing - Manchester Evening News</div>
+        <div class="meta">Google News &middot; 2 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMirAFBVV95cUxQSGtYaXpEdlAzSi10d0xzVGxZaGNqNFNXYzlMTmhoOW00XzczUGVjTnpKZllVYnRwekRBSkpCYXJMRXpmMFhKd19qTlRHS3RZcHVSNnc3SGNPOHpxSEFBVTZvV3hZYWo4MkFVcW5WV2JaYTIxN2NPeWU3c1JHbmRKWGEweU80OFJjQ25ES2k3VGRGX2tzQVV2Uy00RGUyMjVBanBxM3pIS3B3cl9u0gGyAUFVX3lxTE9ySlB6VmVpVVdCR2FJOFYtRlZ0UkZWQ1RuSUxLSXlnNTVmWmI2cVJMaVVjZ3V2WldFQzY5emc2a2JWMU9uRXZMOXYwN1hZczVhSFV4QVR4QndkY1BxakpfUTJUajE5SHJWcUIwRXhRbHZqbnl0MkVGZUI4bHVaSDNoQzRmaF8yZ3MtRGVrR3U5blJOVzh4Vy0yQ2dCTkVRRzV0M0NzWC1MNVU3eENvS0tPelE?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Man Utd land £5.6m transfer windfall as Mason Greenwood seals surprise transfer - The Mirror</div>
+        <div class="meta">Google News &middot; 2 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMioAFBVV95cUxQVHVHR3h5NmRwMldheE9LbnNqOGhtU0E3R2dwclQ2V0pDblVwVl9CSTRGMi1uVWFFcGFZY0JIV1ZONUNCZnRzbl9OOXFJdkZmd3BTTXB0SlFkVEFZX1Z6SHFEcU9LdWt2ejR0TjRVWmVBZXNmTjRqY3AzdDUtT09SZGxRc0xON01HZThwZXhWbHdHOW1TaVk3NkZUM01xZnlK?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Man Utd transfer news LIVE: Santos &#x27;set for United MEDICAL&#x27;, Tchouameni BLOW - The Sun</div>
+        <div class="meta">Google News &middot; 2 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMimwFBVV95cUxPY2VfemQzYkZ4NjVkVmttcTA1azI3dDlDdzQ1VWhKUDNLd29saU9FY01yWHBaVmJUZEZjajNGVnBWN0xIWmxHMjlvZnZGSWREalpJMzY3VUNUV182d0FwNW10eVpRMF9GWm9GUnp3TlpDYlpEYUxueHhjOTd4ZTQ0Zlk2MGpVaC11SmtSaDRLTnJxbExUaUhaTk5OOA?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Man United&#x27;s move for Ederson at serious risk of collapse despite agreeing deal - talkSPORT</div>
+        <div class="meta">Google News &middot; 2 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMisAFBVV95cUxPZjVwTTNKUG1QOEw3SjRodjBiMzdLRE1qYnhCaDBaWHRzckxianRDQXQxaXlkTmQ2c25BVFl0NFBxUVVOWHRVYlQtSDF2RVFrVkRvUTNGUlVoTTVodG5VdWpnc0F5SUVxTlFwd19KX3k2TnVaVUFmWC1VY1owenNYaVJDcFFvbXVpNnpzc3JhRHgyX3hNMkliMl9WbU1pMVNxQW9IYzNYWGJSTkIxTjlKOA?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Man Utd &#x27;set for major windfall as Mason Greenwood agrees shock transfer&#x27; - The Sun</div>
+        <div class="meta">Google News &middot; 3 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMilwFBVV95cUxQbEkzZGF6OC1VMDViX0NuUWtQOG5GaG5wUUxWTDRPYXdnRTkzVzZEUUJOWTdwZ1V5dDZLZGNSZ1doVXVfV3JaOS1iOHFTcHJjcHJQVktpbHdwSUl3blE0Y0RjNS0tOHpUTVdYVlZLc0pEX3FXc18yMXZBdDJaWTIzUGt2TlMwb0RXTVlBS0w4UWJDYlR0S3hz0gGcAUFVX3lxTFBmLU5GVGNVbkxNaHVoa01ZZklyTHZ4Zmw0empMRF9Mb3hNUHlMY2tCal96b19vanhrUm9aem1ZTFRTNXg1aUFpTVhWQTZScks3dWVUQnFfMnhmTDJmODJFVFRYYV95TVM1V1VoY2E3VVhyZW54V2VKZWJka0x2REFLWE5FQUZzRDVkYmtiMGtpbHpOYnVnSGgwNmNWYQ?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Chelsea &#x27;take Alejandro Garnacho off list’ as Man Utd get transfer boost - Daily Express</div>
+        <div class="meta">Google News &middot; 3 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMikwFBVV95cUxNUHNJaGdtQ0tjLXpoX2dKUzhwQWRSU3hPTmZtc05RVEdqelYyWGZOdzlKOGpTNTZVT2FZTkZ6MFBzeW0zXzJZLTFTM0pkQVQwLWhXamhvYXlFV0ZkYnR4YVJ1LV80TXZiQWpiQzQzS0E4aDBpeDVZZUx4MmxQVlRZazRieWY5N044THl6UDBVdmlRTTQ?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Man Utd &amp; Chelsea agree £50m deal for Brazilian star - Goal.com</div>
+        <div class="meta">Google News &middot; 3 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiowFBVV95cUxPWGtDeHNrZEJvaWRmaTA2OGlNVEhNeloyMmF5R0R4cEJjUWQtbTd1M1dqRmZsdWZvVnZuS1M5dXhIMHE1WWc2a2wxNlFsaTF5QjhCREduaFhaVmpjbUNleGFtQnJka2xHLXV2eFkxUmZMNXRoRF95WWNZZFlqZzhLc09RdWZjTXA0QzZWSjJCQTRHaDlyQVE1Nk9OdE1ZTEtOX3Rr?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Ornstein confirms Man Utd &#x27;agreement&#x27; for second signing as &#x27;medical permission given&#x27; - Football365</div>
+        <div class="meta">Google News &middot; 3 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMimwFBVV95cUxNRnlCb21FWVV2Qk1ULXdCejEwMW8yb0NmZ19wcUdaLV9WSlhNbURUUndkM2JJRGxzT2tKUHBOTWlvRXJSaWoxVXFjcmFmRnROSUJmeEVPZnFIMHVSY3BOWlRfaUpvR2hmbHROcVpPVDNORllka3lRQWRxWVp6c1g2blRnM0lSM2NTejJYWUJubHFXZk1xS3pGSzBHaw?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Real Madrid want record-breaking fee to &#x27;agree&#x27; Aurelien Tchouameni deal with Man Utd - Football365</div>
+        <div class="meta">Google News &middot; 3 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiogFBVV95cUxQUy1TbTRvN0Fid0VEX2hLd0pVUTc2MVZfMkU0N1Ewd0l3S2RmNzcyZDR4SXBjeXlNd3ZuUlBUT2pWMXdrQ2FtWkZmMDN5aXZfbTFGY1g4NEh4OEkxbzYxZnAtSm1kSDlMTVFxNGpUX0IwUnRoaVFjaTYyNmxrc0VyR0ZrVkNtblMwMzF3bkhlUHZwUF9VWkVxSXctalE1VUd2OUE?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Liverpool to &#x27;bid&#x27; for £80m Diomande alternative after Man Utd trigger - Iraola &#x27;loves&#x27; him - Football365</div>
+        <div class="meta">Google News &middot; 3 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxPdUpCZ0tTeDY3R2RPNlRpazhpNk15OE1CNElneVpHcFNSVHNleUIxeU1OU2NrcGl3dkpuS0U1aFgwM1BLVlRwajFMWEx2UzFuZnNjSERvY3JXaVllUjh2RXhNWThTN2ZITzNxV2FtN3lxeDJNMi1lWTcxcXBVWE5vdXMyQXRQUmVfQ2FBT3lVTUZRSWs0VmdzQ3NQN1hTa3plYzJFN19tajF4QUnSAbABQVVfeXFMTmVEc3pFV1ZPSGZxRnVrSXZqT2tNZVVQS08wNk90TkxFbEJJaWx0QWdDUkdWb1lsRTZubFd0R1NXcTV3eFVHUDE4WjFLWUd5SjZaS3l5SlYzRU9ZQkFYRXMzYW9KMTJ6NnZjMThDb21Vci1BOHhnRlpnU0ZNNzc0N3Y3ZFlKZGZQVUo2WWhRLWFoeGFELTA5Y2VmQXBpTFhaLUMwa3owMWZfZGlwbDRiY04?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Ruben Amorim issues apology to Man United and admits &#x27;I made mistakes&#x27; - Manchester Evening News</div>
+        <div class="meta">Google News &middot; 4 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMinAFBVV95cUxQNDhMcGMwZ191bW1fWUlKTnpjSFFzenFXQXgzOTBHYUNDalFOUmxuY3prSlp2WjdfekhDY0Zuc1Q0VXJwUGpqQmd4Wl9uY193aHpoWHd1LVJ2dTRNM0RGM3NkdDNPaE5SOTlrX0pib3E2Sk9TYTRjNHJWUG9kSTAtTW1pM3Zja1VDRURieDdLR3d4RXVicVoyU0FwcHY?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Manchester United reach agreement to sign Andrey Santos from Chelsea - The Athletic - The New York Times</div>
+        <div class="meta">Google News &middot; 4 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMipAFBVV95cUxPMWliR0hsbjBoc253amstQTBkS2xiNmpIeVZyU19zZmVFQTlpRnAxcDNVOVFXcHgtQ0tMZ3lvZWtJWFpyUHpiUk44TzBaYnJNblVpd1FuaEhrTnUtNllvV09EOHJYbEhXS0dNWEpDNWJDT204RUVfVkFObGtyVkRFai0waFJ1NkloazMxVWVndjBYXy1IZnJSVUhUemdRcUFNT1J5Mg?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Andrey Santos set to undergo Man Utd medical as Chelsea agree £50m deal - London Evening Standard</div>
+        <div class="meta">Google News &middot; 4 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiowFBVV95cUxNU3ZfWUY3M3dmSUxlVXdYYnl3R0pFOUkydjZCS0Q3SktQbXpkQ2VsTHlhSWRfLThQVHJZWmZxb0hKdTZoNGZoX1BQejRicWVKazdUUG5ZSXQtdFpuOS1kRUtoV2tQb3Rjc1IwYjRWLWFWelNuU2VjZWpnUFd5WFhQVWJHX2VvcXQzMW9jR1hDa2ZoTl82aEw3XzU5cDNGVGowOWNv0gGoAUFVX3lxTE1aVjJldWpPQnU5dlBobUg1TFU2MEo0YU1HRjhEdWtoV3RtdkZoeXNlRHNDX1JoQk5SdEcyalBQXzFfYnFaY2poREJpZXc1TmltVXllU2JCb1FTM0RsMjdBNDFzWUVIZWxGUzAyM19ISW5Pc1FCTl9rS1ZLQjlfQ3lXeTlBM0dMRkpqNU14cFhBMTJCWTdCb3A1RHJiSE1HTTJ5Q2loZGR1RA?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Man Utd in race against time to strike transfer deal after £85m green light - Daily Express</div>
+        <div class="meta">Google News &middot; 4 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMimAFBVV95cUxOcjNYamwwV29VLTJmbF81RG5xT1N3ZExGaEVkeS04RmVpTTV2b2FEaWZtTEZYYXNOWVM5NlFrWFFOdElqZlBRb2sweWVDWWtXWlU0VjhtWjdwWGdEMzV3eUR1NWVTOU5VRHBoY0piU0JjaWI1MnVaY0JNZC1WRUpaam9QajRTQ29vZVY1YVZCTmJRSlRMMnZvMNIBngFBVV95cUxOZDU5MXJQRC15RkZmckdSeFdEQ0lzcUlZNGJ4LTVuR1JqeFFUYnBzWGhNa1FnWmk0bEdxTnlvcEdJYm5kSGZYcVVCaWV5VWtrd2FtNzRSU281Mmo5ODQ4emVnWk9YUm5VeFN3a2RFc0FVSHFiU0M4b1JHaEY5MGJ0SHdDRklIWmYxLUItbXNfZjkyWkJaQ0gxSkhXUE1OZw?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Man Utd strike £50m Andrey Santos deal as Chelsea transfer agreed and medical set - The Mirror</div>
+        <div class="meta">Google News &middot; 4 hr ago</div>
+      </a>
+      <a class="card" href="https://www.skysports.com/football/news/12040/13561742/andrey-santos-manchester-united-agree-50m-deal-for-chelsea-and-brazil-midfielder" target="_blank" rel="noopener">
+        <div class="headline">Man Utd agree £50m deal for Chelsea midfielder Santos</div>
+        <div class="meta">Sky Sports &middot; 4 hr ago</div>
+      </a>
+    </section>
+    <section class="tier pl">
+      <h2>&#9898; Premier League <span class="sub">the rest of the PL</span></h2>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiogFBVV95cUxQRkFVOFBvZzZuVFV4T1hKRXpmTVRQU3h3V3YyQ1k5YWNtckh3aVdGZ2d4VV9Cal9iU0V2cWFUWU12dmRsd2tMa0tBOENwaXV4bGRTZkwyOHlnN0loai1GNGxWb3dvcGNjZEJ0eVRjZ2V5Yi1IOG9fMFVyeVVHeEU5NjlfMkdEMV82anU5Njh5MTU4UGs3YXQ2ZEpRT2lsdGlVamc?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Bruno Guimaraes informs Newcastle of wish to join Arsenal - The Athletic - The New York Times</div>
+        <div class="meta">Google News &middot; 24 min ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMinAFBVV95cUxPcFlHSEJGZzZ2SkVfZ1lqUmllVEVQQmlyNXQxOWdlSWhZOHdmVmxmVGk2OEhMOUp3LUZGUW1hSmtYODY0S2FaempvTDB5NktHQ2cydUNDWUpfU0JpaHRvcDlUenNHaC1felg4Q3IyTVcxdGhVVUk3M285SmM2TXN4czZ0WFdQYXA3aVlQUHNUbjJpWTZ0VUFwZUFBd0U?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Crystal Palace set to sign defender Oscar Mingueza on free transfer - The New York Times</div>
+        <div class="meta">Google News &middot; 26 min ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiowFBVV95cUxNZ3dvVU9sbG8yT1I3S253dVg2RXduQ21ya0NXYmFjaXlKbHJoWnFjQ0ZuNU9nQ0lBSGJZMGNNa1BHeU9PcFRTckVXMjRXN0Z4bjltWHlGelROdEQ3YWF1NVQ2UVY3V0I3LXZWU1FUZjdpOTA5eWpvWTU5d256cUVkSExiMl9VV2FFWDZwdnVaV3Bma0JyQU9pQ0FWeU8xOEFmMmFn?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Mason Greenwood to join Fenerbahce as Premier League clubs decide against move - talkSPORT</div>
+        <div class="meta">Google News &middot; 1 hr ago</div>
+      </a>
+      <a class="card" href="https://www.theguardian.com/football/2026/jul/08/arsenal-on-alert-after-bruno-guimaraes-tells-newcastle-he-wants-to-leave" target="_blank" rel="noopener">
+        <div class="headline">Arsenal on alert after Bruno Guimarães tells Newcastle he wants to leave</div>
+        <div class="meta">Guardian &middot; 2 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMisAFBVV95cUxONC1seDBxLWVkTUVJc3FiaEdJbEZ4MUNNc1JyV3c1RmdHaWQ4SGF3U3BnSHNoekVqUmVPeXJRU1NOMjVEOU03V2FodzB4R0RaUWQtS0ZUZGQzcmhYOC1pTW93RnV0VktKb3RsUExNZXBFcmZ6NE9vUUJmSTZLX0I4MnBUR1ozNHpQTFdVb2xKTzJnemtzak4tb290Y2xOSGpjWlVVMm5yQXVFVGNEM2tERg?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Bruno Guimaraes wants out of Newcastle as Arsenal step up transfer pursuit - Goal.com</div>
+        <div class="meta">Google News &middot; 2 hr ago</div>
+      </a>
+      <a class="card" href="https://www.skysports.com/football/news/12040/13561780/bruno-guimaraes-transfer-news-newcastle-captain-tells-club-he-wants-to-join-arsenal-after-world-cup-exit-with-brazil" target="_blank" rel="noopener">
+        <div class="headline">Newcastle captain Guimaraes tells club he wants to join Arsenal</div>
+        <div class="meta">Sky Sports &middot; 2 hr ago</div>
+      </a>
+      <a class="card" href="https://www.theguardian.com/football/2026/jul/08/maddy-cusack-inquest-sheffield-united-former-chaplain-womens-football" target="_blank" rel="noopener">
+        <div class="headline">Maddy Cusack did not want Sheffield United to know about talks with club’s former chaplain, inquest told</div>
+        <div class="meta">Guardian &middot; 2 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiuwFBVV95cUxPZXBlV0l5TDF5YVZ2eUpGcUZRUGF6RW02UlJqNkhtZkxzLW9jMjZzRnZIeTZ3bU5iNmp3cWpySWlnaFpGM1g0eFNtVFE1eUEtYUlOSnpwNWtrWVFEdk9GLVdOVkN0dWZFVTV5TWx4NHBLOG5LTHZUMC00QXNsM2RBMENqanFtdzBOenlGR0wxeXlBVTU4VVh4b0V2MnhPUG1lMmg5WHdLUmREaEJNRmZQd3ZQLVd4dFZmaWRB?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Tottenham Hotspur Is Finally Spending Big In The Transfer Market - Forbes</div>
+        <div class="meta">Google News &middot; 2 hr ago</div>
+      </a>
+      <a class="card" href="https://www.theguardian.com/football/2026/jul/08/efl-sheffield-united-owners-payment-prince-abdullah-coh-sports-1919-partners-investigation" target="_blank" rel="noopener">
+        <div class="headline">EFL examines Sheffield United over claim owners trying to avoid paying full purchase price</div>
+        <div class="meta">Guardian &middot; 2 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiygFBVV95cUxNOUkzY25NSzRMTzdkY0tCa2dQbTlpcV90QmY2c0JOWTFPb0VnRU1rUjJhbGVhRExlc0J2dG04cnZNdEFoRnRuaWQ1RktfTlhVbGFWeTY3R0daWnhuVk1lMGgxYm1BODFMQ1cxTGU5RTl1S1MxeHNaWWNMZWxwQXJ6TGdhYjEtY0M3QjBWWG15TWdBOURwX2pfRnJQUHZPUV9adHBYWVYwVjQzX1JlVW5sN0wtT3F6QmZ6UVM4S1NaVUJFY2M3eERTcmRR?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Transfer news: Summer transfer window 2026 - Premier League deals, ins and outs - Sky Sports</div>
+        <div class="meta">Google News &middot; 2 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMigAJBVV95cUxNS0ZUNDF0UnByLWRVV2dYVE9iVU5xSGVhTGE5V1pWdG1EZmJ5dEU3d24tVUxLcHBqUEVUandMSmhmQm9lb3ZLMEs3OUFUS2lmT0dPSW1XWkRHLUdEME5sZkJSTmpSVDBzRmdxNkE4VGdaSmdvZHJleW0tWEhmeWhpSEN0bVNpcTcxVl9xZ0dRVDJhcTdNcUZfSllyRTFqa2VDMm0wejFUY2dyX3lDX29KQW9QMEFSOFZUNnpEb1NqNTlZRkc2NjE1bENteEdSbzUtYTR5Q2o0cE9VaHdfWjc0dXlIaDgxNFJUV2hGR2ljOXl5SEh0bGVkWHhWcmd0RVdR?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Bruno Guimaraes transfer news: Newcastle captain tells club he wants to join Arsenal after World Cup exit with Brazil - Sky Sports</div>
+        <div class="meta">Google News &middot; 2 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMisAFBVV95cUxOZlE1MnBBckFScVJ1emd1U19PNFpmUHE3T1VXQVBKZkluVDNBWFZUd3kyaU5OZWltQ29Fc0xGMVJ3NUh0bXRuOFBZMzZuN2N0OTVfRXFVREJVcDJfVnJuWEs4Z3BNa0ljMlVweWhFVjZlbGJOYW8wbjRZb3JZVjlPS0ZlNGE1Nk9pczRXZVB6amR2ZkJhSEFrSnZENHRKeHNabTZjcFdsTUpral9Ta3g0UQ?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Bruno Guimaraes: Arsenal &#x27;ready to offer £60m&#x27; as Ornstein reveals Newcastle &#x27;informed&#x27; of transfer decision - Football365</div>
+        <div class="meta">Google News &middot; 2 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMimgFBVV95cUxPaTlqa1VjR09hSWpNUVZmanE4eUN5UEtieDZhUXNSZENRaUxQVjc0M3FNS25lX0dGN21Fbk1JQUd6aEhieTR2MTBadGQ3ODFmci1xSlNMTTJxMW9OUnZyQXhqSXk0WkN1ZWpZeUk4UUdCU3RCek5aZV8tWVVmcjJSOWpwd0JVUERiMkJucEc1RUdzQnJfVW9GUUVR?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Every Premier League transfer confirmed in the summer of 2026 - Football365</div>
+        <div class="meta">Google News &middot; 3 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxNc0luUERjdFZId2RmOEZaZDhHTkxtN3dYV0RfcExyZUZGNGJkNnJ0cFNkVUJydDVrUm1LSVVCaG9kc2VHOWlmWEM5YjY1OFN4SVVDOXJmdl9HLUZpQy0wc2hwSHlxRnp4NGV6bjdLMmI3a29ZRnBhNkNBLXlHSmF2Q183TXJId2RxYVdWM2MtT0Iwclk2UWpWTWxYQjVXdGNhVGk0M29yaGrSAa4BQVVfeXFMTW5zdktYVUJab0IycmRDN0pzRndJbXpoTTdRZi1PVWRYYXQxZlc0S0U3RkJ2aVV0c24wX3NaZi1FdWpqVTl2V3dVdEpXSjZoV25QU0VHQklJMG03Y3Fsak55bTFwdUhKQnZsdW96VjFJSjhIY2oybjZIdFpzQ2kyUDJ4Nm5WYWhTTVZOVEUyaV9VcDJSTjlFNmg0ZjJwZTRpVjZLaDVqU0VBSXl0QzNn?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Bruno Guimaraes tells Newcastle he wants Arsenal transfer as Gunners plot £60m move - The Mirror</div>
+        <div class="meta">Google News &middot; 3 hr ago</div>
+      </a>
+      <a class="card" href="https://www.bbc.co.uk/sport/football/articles/c982080yd7ro?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener">
+        <div class="headline">Scotland goalkeeper Gunn signs for San Jose Earthquakes</div>
+        <div class="meta">BBC &middot; 3 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMilgFBVV95cUxNRVNYTU1HQmJXMDhHTWdURkN6aDZvMW1fOFFacUpCY0Z1STBncEU0UGhSRjRpWGRrSFZ6WjNCN0lnWTJoXzZMUEZlVjJ6ZEFzQURxMm4wd1Rrd29ucDRhUF9QMGtKWGtoQVQ4a19CYUltek9CbktycGE3elhvbW5NUHFlSHdsRFRTUnNlS3Z6cWxWdVFqMUHSAZsBQVVfeXFMT2Z4djBGdHpPdnQta09hMlVmczY1cjJBZWVVdUt5Z2JPOFpTV0xtbjFMaTRCQjZ4YVRaaXgwUF9Yc0lhVTZQZmtSRDZQWHBaWmN1b3dxOHVXckZVZ1NjMlB2RU5rTVBqTnhsdHhMTWlTdjJ6Tmw1b2phV3ZaeXMzTjlHblpVMkxBNW5rbFlHV1N1eWN3anhkeklsUHc?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Newcastle&#x27;s response as Bruno Guimaraes &#x27;tells club he wants £100m Arsenal transfer&#x27; - Daily Express</div>
+        <div class="meta">Google News &middot; 4 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiZ0FVX3lxTFA5ZUZfblk2R3g3aURpS1I1T3doLVBWa3FEYVJnTFdyblBPLW0zY1ktdHh6d3ZDMXJ0d292UWgyOXdiWC1WdEpYOXUxb2JSUnpCRHZLdzQ0V09kNVRNQW4xal8tVnpBYVU?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Harry Wilson: Leeds United confirm signing of Wales attacker on free transfer - BBC</div>
+        <div class="meta">Google News &middot; 4 hr ago</div>
+      </a>
+      <a class="card" href="https://www.bbc.co.uk/sport/football/articles/c0rydrz49e0o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener">
+        <div class="headline">Leeds confirm Wilson arrival on free transfer</div>
+        <div class="meta">BBC &middot; 4 hr ago</div>
+      </a>
+      <a class="card" href="https://www.bbc.co.uk/sport/football/articles/c3vy0v39qkko?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener">
+        <div class="headline">Chelsea announce £40m Quenda signing</div>
+        <div class="meta">BBC &middot; 4 hr ago</div>
+      </a>
+      <a class="card" href="https://www.skysports.com/football/news/12040/13561731/harry-wilson-to-leeds-united-wales-international-makes-elland-road-switch-after-leaving-fulham" target="_blank" rel="noopener">
+        <div class="headline">Leeds sign free agent Wilson after Fulham exit</div>
+        <div class="meta">Sky Sports &middot; 4 hr ago</div>
+      </a>
+      <a class="card" href="https://www.bbc.co.uk/sport/football/articles/c77yg781lr8o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener">
+        <div class="headline">Arsenal target Guimaraes asks to leave Newcastle</div>
+        <div class="meta">BBC &middot; 4 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiiwFBVV95cUxOUDBPTGlSMmNrTHVIOEdNeGJ4WVlLR2JNRU0ya2E5bTVFc0o2dWpfSWhpODFLZlVHV21xeUpFZ2dhUjJ1ZDlrTTZrM2I0V2l2YklMaW9kdGZVRVRiS1FPSTRVNjluY3hLNDA5MUdPaXFZYURPWGdFTGVBOVhvVkZVbnFNb21pU0RxN1Fn?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Man City expect Liverpool transfer target to sign new Etihad Stadium contract - Yahoo Sports</div>
+        <div class="meta">Google News &middot; 4 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMipgFBVV95cUxNS19iT0VTTFFZckhuVDhta1p0Q19GcmVlYnBZMmZmWm90ZkNBTmV2MVptUnhKV1F2VHh3QkFUMDljbTltTk0yQVNGSU1VN0gyR1hRREs2dW5ORVFYMExQeTA5S2UxLUdPaTd2bFVORV9zV0dBaHN0YzRGYTl0TU9hWFROZG5ndkdOblNSeGhXU3BjLTBkaWpSblZJSVZXN2MzNVMxdldn?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Bruno Guimaraes tells Newcastle he wants to join Arsenal in £60m deal - The Sun</div>
+        <div class="meta">Google News &middot; 5 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMipgJBVV95cUxOT3pGa2pzenliRjJJYVhUWFBXOWdZcjBBdy1FUmxLNVFuNm0zc2VYS3FzdWFvTzc4NTJlN2FQM1RfMFhTMHdjLXhtZm1HM1dkNHZCWC1oczlMUjhuRmNQY2VDYUljaVEyd3NsTmt2M3IxZkQ4Yzk4eGZQY2RtcTl1dkJINmJ0VTVmVU05bW13V245bDF2NW4wcklMYWYtTzNVb1VNOFc3NVZnZXkyempGU0x2VUtnV1lYN2ZhY2RXZGZ4U1V4NFZOaDRHOEg3LU10TEh1Yy1yZmNtczBkVzF5ak8zWVQ4dHl3aHFZQV92MjZ5b0R6SkZXQlZiNWtUUndQSVZ2czJybmZKSGRZbmFFT0NlNnhJSmJoa1V1TTlobXc3MUticUE?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Arsenal title-winning star set for move after World Cup - Euro Transfer News - TNT Sports</div>
+        <div class="meta">Google News &middot; 5 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMitAFBVV95cUxNYzFQRmp2WktQZGFHQWhYTldhZi1NQ0RVMmJaRTdFMzAtaGxwYXY3NE1RT2F2VzNaSGRpaEg5cDlQbGRMR0lIVUptUWJveDRtdFF4S1NMVXFUR2NPcTZwd2ZKRWZnVGh3MkpDRjBLcFpzbGY1c05pOTkxX2h3SGE2YWIwZEdESHlQZGhrRkhkVndOWDZPR0tSSDZpRDFLa3d3dGFzVW00R0xSdmM4UEpneGNvN0TSAboBQVVfeXFMTmp6XzIzU0Zpa041RFN3OWRmMXlpTkkzRGpLQnR5OTJVXzZkMlBKT25zWU5HRDZSSmlETGhERTBTLXdZYjZ1UlZpLXoyTUgzcFlmM0wwa1RlRy10X3JEdkVqNGhyLTduRjJNcjliVk5fMmNzaWlsYXlnS21iZGNQbXpuN1NrcjlsSFJPbFFTTTdIRDU1SjFLTzM1UGZoUEk1S2ZjS3dQdUxVSFY2UGxqaXUwV2NMazhLVWFn?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Bruno Guimaraes makes Arsenal transfer decision as Gunners prepare new offer - Metro.co.uk</div>
+        <div class="meta">Google News &middot; 5 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiogFBVV95cUxQVElybmtHSTE3dHEzOUZ1dHlZVlVyVjl1a0w1a3Q0aVlzVE9HTGltMl9lc2ZyblF5TmlVZWdtSHJGSTFQYXp6dmk2MHcyNnRrVkVQTVRvRVJSRkRWenhOSDRTQUZnRmdIUUNkRkNwSXFYZHNzak0wYzJHcGRSbWQ4d3hFM2lUZk1tdGV3d0ZZWmxEV2laaXo5SS1FanJ3dGt1NmfSAacBQVVfeXFMTlVMODRTQlVYbm1vRG5IdURyR3hQNVU5Sy1hLU9kSlpFS2ZzTFZlRkx2SEprd1J6S0N4clpZblZwa25fbTdWXy0tMUpFamJzX3Y4UWE1dm0xNHozUkRla3JWcVh0X1JSVlhOanQyeG1FT3ZSbURidGdzcUJJLWhrNWoyTGJfamEzXzkzRkNwZXF0MGJhaGF2bGRlcmpleU5YV3N4WHN1Zms?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Newcastle United transfer pitch &#x27;rejected again&#x27; as target&#x27;s mother makes final decision - Chronicle Live</div>
+        <div class="meta">Google News &middot; 5 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMisAFBVV95cUxOQ1NKeHlEZk1YQVg0UVdKamFDd2FIek0tTFI3QVZIa1l0U2VHckRLcF90eFRwZ056RFV0dXowTFJrVWJ3OHp4b205RUpmc2pHUDAweTdMWF9jSElhXzUwaGVEUmtrX1JBVWl2M2ptSTMxMGxlY25hNFNZalV5NEJlbjQ5R2dZdndfOTNobVM2anVpQ01rQWtKNk1fUUtiU0VBR2NBcXJ2X185RDd3UlRJRNIBtgFBVV95cUxQR3FNcTVwckhwdlN2bHNOMURpbUUwZ2RlZ3lfT05uZThWcWVYVlJFbEcwbEl0eGloTktJVlhzRnp6Mkg2UVg5TG1iMmRjeWlUYUF5LWg1azlHM28xbFBqU01jM0NRNUVmRGp0NGJuUU85b0V3Tjh6LXkzdUhCN0VtTTlfNmN0UkFLZVVfWnJscFVlbEdFLWdHcklUajZZUmNodXZRYnpjcVBHeGswTFlXd0JmdGRfdw?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Liverpool backed to hijack move for Arsenal transfer target: &#x27;Statement signing&#x27; - Metro.co.uk</div>
+        <div class="meta">Google News &middot; 6 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxNTnRYU24tdXU0OGdBby1TYUJTT2hoZTd6ZEJPMWdhYmZfUURSNmY1bnJXWHp3N2RweG1Ra2lHRFVSUHlncDBXS0VlZlZuRDdvMTMtbV8tWkM0ZWN5UkRzU2piUFRaWGdNRldWZ0E1SzBUQ0JGWjJ0cm5SOGtPWU0yeThNVmZKejUtTVVHNVp0dVVfOG4wMzAtVDJVREJhQUtrb3llT1pTSVh3U3c?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Brazilian striker Emersonn becomes Ipswich&#x27;s record transfer signing ahead of Premier League return - AP News</div>
+        <div class="meta">Google News &middot; 6 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMingFBVV95cUxOV2U0WHNlWXh0VlBwa2FJWUdFWU9VeERkMFR2UFV5YlMya0c5X09vYl9zWVY0VldBc3FUU1BDQ1AyUDhPUDVhdU50THBCVHU1c2hYWUNvTUtBNGUxcnd6UFAtakNHV1lKc1FJU1JmbmZWTW1mNVJXcWFMWXcxQ2VLUGxfektrV1FJWHRZUmZ4b0UxU2VHcTJTR3FlWXNxUQ?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Hull City target seals club-record transfer move to Premier League - Hull Live</div>
+        <div class="meta">Google News &middot; 6 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxQQzkwTDI3dW5taXJST082MG9lZGpxaG54eF9Fc1k2YWl4NGtuU3dfem5qcHAwNVJXQ1M1bGtsSnA2dHVtWC1zZm91UmhrOFJZQzZNU2Jqd05PMkt2TjNDV1ZudzFyenBoM1RTT19HTEVJM0lFTHQ5TXJwNUFzRVprbG9faDFuSVQ4N3F5ak01UFVBR19xaFp3ZDRuV1dPRVU3bjJRM3NzVDdZZ0E?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Rangers star issued warning over completing transfer move to Premier League side - The Herald</div>
+        <div class="meta">Google News &middot; 7 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMimwFBVV95cUxOQ1dENUIzT0RFbk9xMWNndTJGRVdXWEVNTkQ4MFdaWTRVQlBrVnhRb2l4VmdHamQ1TWEyQ3FneVpPcTJIQTEtOGRlX2xQemJIRWMtLUlYUUhicGZwRU5mRUVXQ2xPRXJ6SUNrUlRRYjM4aDR1dDhoamNVYk9hYjBkUkN0LVJKdXJNS1Bsb3hZY18xWDI3YUFzVkZ0MNIBoAFBVV95cUxPMVhBUnUwNlRSUUZBT3hQSkRIakJfT1I5U2xhN0JEOUIzd04wcjlZS19QMi1xU0VFdkNRNEpKRzl0MHpmMkN2SVdhcG5peVB6bS1yZjltb0tFZEJ3cUZaRlRQNzJpN3d5V0VRdTlaUnJpQ3hmYjRtU01zZG5HZGVWXzdsRS1iaWVfYkNvVUhYVDNZSFNTRTZNZWMwUUNaLVg5?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Man City land another transfer win over Arsenal after beating rivals to £12.5m deal - The Mirror</div>
+        <div class="meta">Google News &middot; 7 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMilgFBVV95cUxPTHRrNml4cmpZLVhCenJVWlA5bkFlUU96THBwRzhlMFBWVUFBXzhrWktLeXdJZjdqMTJOYTR1LTZ5ZXFPS2R3MXE1MHRVMGNwd3RldnhkYzRjbnRyWHBrNk5zOGdtLTB6U0VnanlmMDRzYlFxTkx1RUxBTVVTUHhUeHlkekVNdy1NbkMwd1dRU1JEWTBUQlE?oc=5" target="_blank" rel="noopener">
+        <div class="headline">The biggest Premier League transfer overpays of the summer revealed - Football365</div>
+        <div class="meta">Google News &middot; 8 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiiwFBVV95cUxQUnAxZUpleWJkVVItVlVBQjd4X2tpbm91VjZXLThFdW1TTy1NYlE1S0ptcG94U1J1RjZtLWVzb3JQS1JiWHNUNGxxbm5YUDBGSGhIQVVpd2QyT1hpMGZoNVVhVDNTMTZFczhUQUFISTREb25xbTVyZTREWXZQR1pqVC04clVseVJQVjVN?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Ex-Liverpool Premier League winner open to joining Real Madrid in shock free transfer - talkSPORT</div>
+        <div class="meta">Google News &middot; 8 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMi-gFBVV95cUxOQUdTOGl6cFhuVmVIRThXaF8tN01fby1nT0wzbzBXU1ZmUWl5VWYzNU1sWlVuNFo3anFDVDZaUjE3Q2JySi0wZmVuRHo3M0xHQWVfdlFjRTBrV19oTVJvU0FnT2tPYlpHb3J0eFdMNUUtSGp4bnhQTTBIWVN0UW0tWUJJM1A5YnljcmJJM2h4Qk9lUEMwc0RXZ295a0N4TEF0ZDB3MzR2enlYWGl0U25fMkJrMUctNXlJeEd2YTJWUnA0NXBXRE9MQktUcFhkR0hZOGpuUEhpcXFVQkZ6Rmx6djcwa3dPOXlDeGxmdEJ4TlRtQUpEcWxFekhn?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Premier League summer transfers 2026: All the Done Deals - footballtransfers.com</div>
+        <div class="meta">Google News &middot; 9 hr ago</div>
+      </a>
+      <a class="card" href="https://www.bbc.co.uk/sport/football/articles/c74y723g7eno?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener">
+        <div class="headline">Has World Cup signalled end of chaos at corners?</div>
+        <div class="meta">BBC &middot; 9 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMinwFBVV95cUxNOFNxSG5BQmU4a3dpZTZyaC04bVZORHZqaHRWRkN2NzFvbTdlbXBRdkdmaVA4aExXVEVTcE43Ymh3by1rZnhST3BCWk0ybTZFS1JIN0ZSRXNIaktrb1pjOHZlU0xxSTNBdlVGVmJLbTNaWGNqNFNfdE03aVpqdHJLUFRDUHpxc0EtckZUVl9wOHVHS1lKWjBmd3BtVVZQc03SAaQBQVVfeXFMT3RRa0M5cDBlRUJoandGaXRpLU9YZWtid3l1ME9mb2JNTXE1d1JDRUw4SlVNTDU4bWZlUFgxdURHbGJ0d0lLWW1NanliZGxlYzFyelRjOGFRREhnWnVaX19tQlZMNW9XNVdDTkZ4X0tISHRPVVJxY0NsaGYwNUdCNEQ5REUwMkFXUHJsNGxJZndiYlVCZG1pcDJkZDItTFptZkxySTg?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Tottenham ready to &#x27;go all out&#x27; to beat Arsenal to blockbuster Eli Junior Kroupi transfer - The Mirror</div>
+        <div class="meta">Google News &middot; 10 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMilAFBVV95cUxQZC1wN0t3NVJsZHZlWFAxWkd1RDRNS00xUUR4bWFiOXQ3WXhVc0RkZnJtNnlldENkY2kxMkxkRElMVkRieW15MGg1ajdZdWJFQndpUGdEV0ZUbThxcVpRcXhvUm8xVlJrbWdiNXZCUFlzTklEUlZpSy00Q3VEdVd1QVdFVTQwZVNrUU1FblhueURwZE5a?oc=5" target="_blank" rel="noopener">
+        <div class="headline">&#x27;I quit Arsenal before they reached another level – I regret transfer decision&#x27; - Daily Star</div>
+        <div class="meta">Google News &middot; 11 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiekFVX3lxTE03YzZ0SV9TZW1yelJxb3lrWFdrNUZiS09oajdXOXVFTUtLV3NCT180aW1JNnlsYXZwcXVrbVJYa3J3MnNpQzI4Wnk5NmdBQWc5LTE0N3YtT09CUlFGTkFqTlpJTFBteWZZZUJFcnduZFdFT01hQ1g1RHZ3?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Savinho to Spurs: City Must Now Decide on £60m Sale - bestnewbettingsitesnotongamstop.co.com</div>
+        <div class="meta">Google News &middot; 11 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMixAFBVV95cUxPSWFLeGR6OVA0czY3enBEVklaN3hMSGRhYmFyeTFGVDVtZEpPdWVDT3pzUzc0ZmVRNk53RUVKTGJxTENCSElqNjMxQlVzamhCM1JhclRyWUVDQ1NqdlhZYU5RTjF2TTRKMjV6RmdlYml0SS1yQTFoejdLR0EzT09XakFzWWJPUW91WVN5WmVHYjBCeEljNDhTRlhIemNBVWRYRHN2cnk5QmYzTVVrOE5hOTBIN0VJajhrdDVFeV9TUjRUNF9X?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Arsenal prioritise Morgan Rogers transfer with Aston Villa backed into a financial corner - FourFourTwo</div>
+        <div class="meta">Google News &middot; 12 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMikgFBVV95cUxObXdSV19Kb1ZlOEhPd0NEdGljejNZeEZrc3J1eWVWRUV6bG56QlJUQWVDLWJSSGd1bS14QlRqRWRCU2ZEbkVfZHczQU1ZdWIzWWhtZm5NZnVWWDhFZUNfUXp5dFBJSTFFTFF4cDlCZWVmVU1UR3ZxVVlSbjVLSWc0TV9FY2xPMGszSFcxeU90NnBTZw?oc=5" target="_blank" rel="noopener">
+        <div class="headline">The Premier League starlets who can be Blackburn Rovers’ next loan stars in key summer transfer window - Yahoo Sports UK</div>
+        <div class="meta">Google News &middot; 12 hr ago</div>
+      </a>
+    </section>
+    <section class="tier other">
+      <h2>&#127758; Other Top-5 Leagues &amp; General <span class="sub">La Liga, Serie A, Bundesliga, Ligue 1 &amp; more</span></h2>
+      <a class="card" href="https://www.skysports.com/football/live-blog/12040/13279298/crystal-palace-transfers-latest-news-rumours-and-gossip-live-updates-goals-and-highlights" target="_blank" rel="noopener">
+        <div class="headline">Palace latest: Defender signing close as Kamada pens new contract</div>
+        <div class="meta">Sky Sports &middot; 1 hr ago</div>
+      </a>
+      <a class="card" href="https://www.theguardian.com/us-news/2026/jul/08/trump-fifa-red-card" target="_blank" rel="noopener">
+        <div class="headline">White House’s World Cup head defends Trump lobbying Fifa over red card</div>
+        <div class="meta">Guardian &middot; 2 hr ago</div>
+      </a>
+      <a class="card" href="https://www.bbc.co.uk/sport/football/articles/c24yjpggq13o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener">
+        <div class="headline">Fenerbahce confident of Greenwood deal</div>
+        <div class="meta">BBC &middot; 2 hr ago</div>
+      </a>
+      <a class="card" href="https://www.bbc.co.uk/sport/football/articles/cvgjd1rr3ryo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener">
+        <div class="headline">Who has your Premiership club brought in &amp; let go this summer?</div>
+        <div class="meta">BBC &middot; 2 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMikwFBVV95cUxNbWpkOXp6NDd3bnhpV0NBVlZNcU9ib2NhUVlIbjNsajJ2MkdnTFVnS19VVHNHVTYwQ2VzV244dHRqMmhfUm5zRVNhZVJlYXpkZzNXZC1UdTl3Z3hwUElINFV1NGMtWnFfMmxJYmpBMy1mS3FfYTlKUzZzTVY5bmtkS0ZiZ3YwYy1yTjZJRDNPQWNza1k?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Joao Cancelo set to join Barcelona in permanent €10m transfer from Al Hilal - The New York Times</div>
+        <div class="meta">Google News &middot; 2 hr ago</div>
+      </a>
+      <a class="card" href="https://www.theguardian.com/football/2026/jul/08/reece-james-remains-injury-doubt-england-right-back-woes-norway-world-cup-quarter-final" target="_blank" rel="noopener">
+        <div class="headline">Reece James remains injury doubt as England’s World Cup right-back woes go on</div>
+        <div class="meta">Guardian &middot; 3 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMigAFBVV95cUxOZUhKWWZCZjNOWkJWaFJjNUNTRlNfMDRCdW11bVVwRU85bTkybXVvYU5WQXE5MDZBa1lNS3NoOXcyU0IzdjU1TnE0YmZFckpDcFQtUmJ5Qy16T2VCRHVQRWY4bDVPMzJTSW0xQW43dTNBZUNKb1kxT05xbExBNVUtNQ?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Rumour ranking: Assessing the top 20 transfer window whispers - Football365</div>
+        <div class="meta">Google News &middot; 3 hr ago</div>
+      </a>
+      <a class="card" href="https://www.theguardian.com/football/2026/jul/08/egyptian-fa-questions-fairness-of-loss-to-argentina-amid-refereeing-furore" target="_blank" rel="noopener">
+        <div class="headline">Egyptian FA questions ‘fairness’ of loss to Argentina amid refereeing furore</div>
+        <div class="meta">Guardian &middot; 4 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxNVmthbkF1dmhLcHRGX3dzeEUxd0RyeV9TR3c3dUlBZkpJaUp3VjViOU9IMGVjNjBoSEVTa1REVV9CNVBpaDVmMVNwWDdERHpNV3VjTzNKeFpfcE01aUlRMVBwa1VCUXNHMmdlT2ZxcThwQ0Z4aFJacXo5TkE0M05FRkFjZGdFSUJLNDB3SVlveG1KTVRBSlpSR0R6cG1JRGZ0SGlRLW4zeEtTNFp5a0RwQkJIQXdXLUJv?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Andrey Santos to United in 50 million pound transfer - Karlobag.eu</div>
+        <div class="meta">Google News &middot; 4 hr ago</div>
+      </a>
+      <a class="card" href="https://www.bbc.co.uk/sport/football/articles/cn75ndvd1y3o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener">
+        <div class="headline">From Barcelona to Bromley: Inside Putellas&#x27; move to LCL</div>
+        <div class="meta">BBC &middot; 4 hr ago</div>
+      </a>
+      <a class="card" href="https://www.bbc.co.uk/sounds/play/p0nxknhz?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener">
+        <div class="headline">Podcast: Hands off McGlynn! Falkirk&#x27;s season preview</div>
+        <div class="meta">BBC &middot; 5 hr ago</div>
+      </a>
+      <a class="card" href="https://www.skysports.com/golf/news/12040/13561713/the-open-commitment-ra-to-launch-new-fan-code-of-conduct-at-royal-birkdale-to-avoid-crowd-behaviour-impacting-major" target="_blank" rel="noopener">
+        <div class="headline">R&amp;A issues new fan conduct guidelines to avoid bad behaviour at The Open</div>
+        <div class="meta">Sky Sports &middot; 5 hr ago</div>
+      </a>
+      <a class="card" href="https://www.theguardian.com/football/2026/jul/08/france-deschamps-unruffled-argentinian-officials-morocco-world-cup-quarter-final" target="_blank" rel="noopener">
+        <div class="headline">France’s Deschamps unruffled by Argentinian officials helming Morocco quarter-final</div>
+        <div class="meta">Guardian &middot; 5 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMioAFBVV95cUxQQ2ZlUERaYnpPbE9KYjlEZU9JYTV2MFptVXpjWGV2YzF6Ri1yX0dMNnRiUE5ENzljeTgtaXBqZlNNZlhhZmk4ZXVxR2lZMTBDZUU0MC04QVRxaUxMSGxDeDB5NFV4SGxHWDlpalFkNm5nX2pzdXdkakw0VnhiVUs3SW93TjRzMGtyOEdnY0pHcHJsd0FpLTE3M0Q4Y3VPd3RQ?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Alexia Putellas’ London City Lionesses transfer moves the dial for the club and the WSL - The Athletic - The New York Times</div>
+        <div class="meta">Google News &middot; 5 hr ago</div>
+      </a>
+      <a class="card" href="https://www.skysports.com/football/news/12040/13556749/alexia-putellas-transfer-barcelona-and-spain-star-completes-womens-super-league-move-why-london-city-lionesses" target="_blank" rel="noopener">
+        <div class="headline">Putellas has power to change the WSL - why is she joining London City?</div>
+        <div class="meta">Sky Sports &middot; 6 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMi9AFBVV95cUxOcU1wb2JVdFFCY3AxVXRic1R6VENRYmRzblVNXzBmelhvVzF0XzhjOXJrUWhuV1Bfc2dnbDJabEg3TE50V0lfRWJXaTF1QlhCa2VpcTVtMjM1NUJQTEVFR3hySVYybl9fRDBjY1JoS1ZMS2p1MlduQjNXUW9LMEgzaURhWkdzSnhpVWZUaWoteV9YUmwteF84aXJLbURVLWZucENQMXc0ZGg5MmJXTEUzZjkxcVhUbzVNa19TN1ZTTjhjUlNKSTlobVpOeXZraEVjWUVabXRGUkRsRDA2Zzh1MTB0NlJOb3BOUUVaaHl3MDk4dGYw?oc=5" target="_blank" rel="noopener">
+        <div class="headline">London City Lionesses announce signing of two-time Ballon d&#x27;Or winner Putellas - TNT Sports</div>
+        <div class="meta">Google News &middot; 7 hr ago</div>
+      </a>
+      <a class="card" href="https://www.bbc.co.uk/sport/football/articles/cvg7wenkklyo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener">
+        <div class="headline">London City sign Ballon d&#x27;Or winner Putellas</div>
+        <div class="meta">BBC &middot; 7 hr ago</div>
+      </a>
+      <a class="card" href="https://www.theguardian.com/football/2026/jul/08/london-city-lionesses-confirm-signing-of-spanish-superstar-alexia-putellas" target="_blank" rel="noopener">
+        <div class="headline">London City Lionesses confirm signing of Spanish superstar Alexia Putellas</div>
+        <div class="meta">Guardian &middot; 7 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMie0FVX3lxTE52VEZTZWhFbmctMTFFcUdhWkNMdXd6UUN6am5MMXJFZFZnX1k1YjZIQ2VmTXFua0w3QTVnRW1UdV9RLTQ0TXdpdEJZdFlmV1AzUUtOMktTSUthanNoZkNlQmlZR0QxeTdxWGhlbzFzLVdJeHlnVDhpVEpCZ9IBgAFBVV95cUxPXzZkZ2JlQWxZSkxkM0huT3ZCTXN3Yjlzbnl5Sk1VY091OUZRS2xIWTNuWmViNjdtdjRnaGEzN2FBeXFnUFdzdWtqWnpNMVFNelFBbWtFeTM5ZEJfbG4zVUsyNXVyZkVrRDAwQmF2UWJVenBBV3BISFpxMVYyRXd6SA?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Amorim: Milan’s new transfer strategy and why club spent record fee on Ramos - Football Italia</div>
+        <div class="meta">Google News &middot; 7 hr ago</div>
+      </a>
+      <a class="card" href="https://www.theguardian.com/football/2026/jul/08/football-daily-email-gwc-argentina-egypt" target="_blank" rel="noopener">
+        <div class="headline">Football Daily | Argentina, VAR machinations and the greatest goal that never was</div>
+        <div class="meta">Guardian &middot; 8 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMid0FVX3lxTFB1X1B3anRCRWVvSFZGQzZxbDNlSC1yZkl1Z2FxcXdTb1pvMXJNbzhrR0JQZ3JoQnhuRUR3QmVzVDBMY1loMmh4U1lOY1daM0NXQXB0eFlqcUxmZGFsYU41Ymw4eVR5TnFobU8wSVJmdHo0RWNmMDJV?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Virgil van Dijk targeted by AC Milan for transfer next summer - This Is Anfield</div>
+        <div class="meta">Google News &middot; 8 hr ago</div>
+      </a>
+      <a class="card" href="https://www.theguardian.com/football/2026/jul/08/world-cup-free-agent-xi-vozinha-salah-clubless-players" target="_blank" rel="noopener">
+        <div class="headline">A World Cup free agent XI: summer bargains and top targets among clubless players</div>
+        <div class="meta">Guardian &middot; 9 hr ago</div>
+      </a>
+      <a class="card" href="https://www.bbc.co.uk/sport/football/articles/c9w220v7n97o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener">
+        <div class="headline">Wrexham to &#x27;hold nerve&#x27; in transfer window - Parkinson</div>
+        <div class="meta">BBC &middot; 9 hr ago</div>
+      </a>
+      <a class="card" href="https://www.theguardian.com/football/2026/jul/08/how-norway-made-sport-fun-kids-built-football-team-beat-brazil-world-cup" target="_blank" rel="noopener">
+        <div class="headline">No league tables, no trophies: how Norway made sport fun for kids – and built a football team that beat Brazil</div>
+        <div class="meta">Guardian &middot; 9 hr ago</div>
+      </a>
+      <a class="card" href="https://www.skysports.com/golf/news/12040/13561587/genesis-scottish-open-rory-mcilroy-relishes-perfect-prep-for-the-open-and-says-event-should-be-national-open-blueprint" target="_blank" rel="noopener">
+        <div class="headline">McIlroy: Scottish Open &#x27;feels like home&#x27; and &#x27;perfect&#x27; prep for The Open</div>
+        <div class="meta">Sky Sports &middot; 9 hr ago</div>
+      </a>
+      <a class="card" href="https://www.theguardian.com/football/2026/jul/08/kylian-mbappe-france-world-cup-2026" target="_blank" rel="noopener">
+        <div class="headline">Statesman, comedian and dealer of hard truths: how Kylian Mbappé became the king of this World Cup</div>
+        <div class="meta">Guardian &middot; 10 hr ago</div>
+      </a>
+      <a class="card" href="https://www.bbc.co.uk/news/articles/crm0rr4x29yo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener">
+        <div class="headline">Blackburn Rovers sued for £500k by kit suppliers</div>
+        <div class="meta">BBC &middot; 10 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMijAFBVV95cUxOZ216NjdNS3kydEJBWllOM0xCUGM5Rm1iU3BaNUlJal84eGJCWFBEVFQ4cEZzX29CSG1oM2VYNzFVVmFlME9MUk9DZ0otVUh1dFFqWXM3LWx5Z0otbVdYZG92aUxqelQwZFdHQmpJaEJzVHo0Q3VrZENzaHNmQldJYUY1T0VWR0VVUHJIbNIBkgFBVV95cUxPbFhkZjNzbUxScGxvdzZkQzJPZUVLdVllTGhUWUNqTTJuYjl2Vk81UFZqN1JjVS1kMGp2ZzVuTjQ4bUlNT3hJTUk5ZXFLRGhyalB0WlYwQzRUZ0FGdi1rNHRiNl9PbVNJMGtpb0FiUlJLdlJxRlBFb2tnV2xiTjI2NWZOaW9PbGhVQTRpamYwc2JaZw?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Transfer news 2026: live updates, rumours &amp; done deals - BeSoccer Livescore</div>
+        <div class="meta">Google News &middot; 11 hr ago</div>
+      </a>
+      <a class="card" href="https://www.theguardian.com/football/2026/jul/08/world-cup-2026-team-rankings-last-16" target="_blank" rel="noopener">
+        <div class="headline">World Cup 2026 team power rankings: England on the rise as last eight are set</div>
+        <div class="meta">Guardian &middot; 12 hr ago</div>
+      </a>
+      <a class="card" href="https://www.theguardian.com/football/video/2026/jul/08/argentina-avert-disaster-with-late-controversial-comeback-world-cup-daily-video" target="_blank" rel="noopener">
+        <div class="headline">Argentina avert disaster with controversial late comeback | World Cup Daily – video</div>
+        <div class="meta">Guardian &middot; 13 hr ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiwAFBVV95cUxQbW9ZaWpSbE9rU3JDUGRXYnU0ZVRmSTNpX3Q5Q1NrRGtWYmpJWXhkeW94dlE3dFNBekFlZTJCVVFOS1FaUG5Ka05OeTdpRWU1Z1NVbVBrMDdZWFJ3N1A5a2M5UGtPSDgtekdxOW1LZjdiUUl6VjVVRzd5VzZzMlpOSUhrempJZk1UakN2S0k5TWItODN0TzBEQUhwcDVIdkNsMU1NendEWDhCdXNrUVpHbGhzVnV2c1FWZzdNWUdPWFc?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Transfer Centre LIVE! Football transfer news, updates and rumours - Sky Sports</div>
+        <div class="meta">Google News &middot; 1 day ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMi_AFBVV95cUxQZm5XVE5nNWJ5RW9BYXp0SHQ0VHNIVE1ueVBCbnZ6WmthRHVtdFNsOS10MC1wel9JbUEyalE0WFZUSFZYUl9LbkdFd0IxRGVWZnByNFNvLUw4MURBQmtVWU9sejRjYlJ2YkRpY0JfWlVFQlJEUjVMdnRqQmdvdG5XdkVlM0IxaVVscWp6S1RMR2FhNFBzRUZEMXpFM3hjNDhMOU5Qb0NFeFZhTGpHdXhlaV84Mmk1cGFOdUpDSHVuU296cFZ2U0c0QWlCOHBtLWRaS0ptMWdPU1FYSENDN0JSZjFCT0ptVTZDb0VYRHBmQW1KYzB1SmxyQlJKT0I?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Done Deals: Every official completed transfer around Europe today - footballtransfers.com</div>
+        <div class="meta">Google News &middot; 1 day ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMi5gFBVV95cUxNQ01WbWFkTHhmbVU1c2F2WlFJZzR1Q3FKODh5eEdKcjQxRUpUNWY5Y1I1cXV2Rmw5Y2xOSmJWZDBQcklXZ0t1MUtJbHhGVXhqYVRWWUZKLVBJREpPYWhETktmSjBzZktDQi03THI5QkVyd2RNaWQ2SmVCdFVScUs4TGhnc1ptcU9nT2tzSF9wcHdzMGxNTm9Kb1FVX3NiWUxIaVE1YXQyQy1wWWMzZnE2QnVsTUNTc1Y0Snk4OU5oemdyWDJSd3JxUEg0UkZBaHktX0ZzMGEwWGxDbVFIcUo1RDRCRE11Zw?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Juventus &#x27;exploring&#x27; Stones signing, clubs circle wantaway PSG star - Euro Transfer News - TNT Sports</div>
+        <div class="meta">Google News &middot; 1 day ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMi1gFBVV95cUxOSDJQTlhkX2xxOXVHcTdiUTRzT013NlRta2RWenVNLTFjY2loWmY5ZGdVaHFzRHNGZ1RjZUpTZzNQb0hsSnZ5MXVQejlRYm5zdnBvbzV5T0g1STg3dVNGWndabHY2ZE1VQk5wbmpsckIwWDl3ZXUyVzZsakY5RVduTzlpTzJqc3N1eUwzOHFNdURzeWJTamJSMklMa2VPNjV4U2lkcWlpZXdPQldIQVViRF9HbnhXTHRpaXlhZ1dGYUZZYllmd2JqM1NzN0ZFb0RjX3J5OFRn?oc=5" target="_blank" rel="noopener">
+        <div class="headline">EFL transfer news, rumours and gossip for Championship, League One and League Two - Sky Sports</div>
+        <div class="meta">Google News &middot; 1 day ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiuwFBVV95cUxOcFhUQkk5SktuX3hfU0lJZHR2Skx6TFFTQXpRT2trTnBmUk9GNTQzWkJ2anVQVWFQdHd0SU5MSTkzSllKT2V3Q053MWw0VWpIdkZtLW1raGpCVWRGMGRJMUNjZDAzMlYyb1dJaTAtOGxFOHhESHUtaHZ2TWZZWDlQbldCQURIUW9hRWR1ZS1CWnZuQ0FobXFKcVFTTWhoQnR1SlhXWjRXX1ZXelBKLXlCMDNnTER3enhqUDhR?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Scottish Premiership news, transfers, rumours, gossip and more - Sky Sports</div>
+        <div class="meta">Google News &middot; 1 day ago</div>
+      </a>
+      <a class="card" href="https://www.theguardian.com/football/picture/2026/jul/07/david-squires-on-england-world-cup-classic-mexico-donald-trump-fifa-usa-belgium" target="_blank" rel="noopener">
+        <div class="headline">David Squires on … England’s World Cup classic in Mexico and a Trump novelty</div>
+        <div class="meta">Guardian &middot; 1 day ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMingFBVV95cUxPMHBDVm9LekZpT3pDMlJKYzc1TVBLUVluaVNTQnBYSndUT0xJejN4TVZteGNTSERfZnVIam9zeXZTNzZxUFBRUFVvaDVBU2JBZ05yaGV0UVkyU0dmdlJnMk1GY3NKeGM1SWQzdTloUngyU25uTnZScHVZT3pMLUxKWURRSE1LTG41NnlFMzFpNFpzLXc1cTRlalg3Uk9rUQ?oc=5" target="_blank" rel="noopener">
+        <div class="headline">The top 20 biggest transfers of the summer 2026 window… - Football365</div>
+        <div class="meta">Google News &middot; 1 day ago</div>
+      </a>
+      <a class="card" href="https://www.bbc.co.uk/sport/football/articles/c4gyxdeql5eo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener">
+        <div class="headline">A shambolic end for the American dream - did Balogun saga play part?</div>
+        <div class="meta">BBC &middot; 1 day ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxNYUgzd1VwbmhITnRGcVJVaVNVTkI2SXJqcUdIbEhHV2liNld4dTJPZkxzRUVhVUttWHVzbm1fU0t2cDVHMmZJMWRuemlkaFotRGpVcFlpaVloSHR2MmNIWVVXeHRBc0tuVlFFX3lWZUZKZEk0OXJCR2lYNEhTaFVCM0F4SkhXbm5GbUJROTV4OWxqNkd0ekx2LXZjdm5uOUE0c3JEazMtR3FrcWM?oc=5" target="_blank" rel="noopener">
+        <div class="headline">I was scouted by Celtic two years ago, now my transfer valuation is £42m - Glasgow Times</div>
+        <div class="meta">Google News &middot; 2 days ago</div>
+      </a>
+      <a class="card" href="https://news.google.com/rss/articles/CBMiUEFVX3lxTE4tbnB2ZVFMWGtXa1d3TDRQYUlTQUd6UUM5c0QxaTlGam96MTl5VncwVDZwYUFieFl4WWUtdXl3bkpLODZGb19oM0NhT0RhZXJr?oc=5" target="_blank" rel="noopener">
+        <div class="headline">Lee Kang-in (Paris Saint-Germain) will leave Ligue 1 in France and return to Spain&#x27;s La Liga stage. - 매일경제</div>
+        <div class="meta">Google News &middot; 2 days ago</div>
+      </a>
+    </section>
+  </main>
 </body>
 </html>
