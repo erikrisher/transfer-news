@@ -109,6 +109,28 @@ GENERIC_STOP = {
     "close", "talks", "talk", "verge", "brink", "reject", "rejects", "rejected",
     "accept", "accepts", "offer", "offers", "price", "valuation", "swap",
 }
+# Common capitalized words that show up in headlines but are NOT player names.
+GENERIC_STOP.update({
+    "deadline", "day", "days", "live", "blog", "round", "roundup", "up",
+    "best", "top", "every", "all", "full", "list", "gossip", "rumours",
+    "rumors", "rumour", "rumor", "watch", "video", "biggest", "morning",
+    "evening", "tonight", "today", "yesterday", "weekend", "saga", "hijack",
+    "twist", "breaking", "urgent", "free", "big", "money", "record", "fresh",
+    "blow", "boost", "injury", "exit", "return", "hint", "claim", "claims",
+    "verdict", "prediction", "preview", "review", "ranking", "squad", "team",
+    "teams", "side", "clash", "derby", "opener", "hero", "snub", "snubbed",
+    "race", "chase", "hunt", "battle", "picture", "gallery", "explained",
+    "the", "a", "an", "and", "or", "for", "with", "from", "into", "over",
+    "la", "el", "los", "las",
+    # countries / nationalities (also handled via possessive stripping)
+    "spain", "italy", "france", "germany", "portugal", "brazil", "argentina",
+    "netherlands", "belgium", "croatia", "uruguay", "colombia", "mexico",
+    "japan", "korea", "senegal", "nigeria", "ghana", "morocco", "egypt",
+    "cameroon", "denmark", "sweden", "norway", "poland", "turkey", "greece",
+    "austria", "switzerland", "scotland", "wales", "ireland", "russia",
+    "ukraine", "europe", "european", "spanish", "italian", "portuguese",
+    "belgian", "croatian", "brazilian", "argentine", "dutch", "african",
+})
 # add every word that appears in a club name so "Real Madrid", "Aston Villa"
 # etc. are never mistaken for a player's name.
 for _kw in MAN_UTD:
@@ -150,7 +172,9 @@ def _is_name_word(tok):
     core = tok.replace("'", "").replace("’", "").replace("-", "").replace(".", "")
     if not core.isalpha():
         return False
-    return tok.lower().strip(".") not in GENERIC_STOP
+    low = tok.lower().strip(".-'’")
+    low = re.sub(r"(?:'s|’s)$", "", low)   # "Spain's" -> "spain"
+    return low not in GENERIC_STOP
 
 
 def detect_names(title):
@@ -421,7 +445,25 @@ def esc(x):
     return html.escape(x)
 
 
-def render_tile(g):
+def render_tile(g, rank):
+    # Size tier: the top subject in each column is a big "hero" tile, the next
+    # couple are medium, the rest are compact -- this is what breaks the grid.
+    size = "hero" if rank == 0 else ("mid" if rank <= 2 else "mini")
+
+    # Stable per-tile jitter (from the label) for uneven widths / spacing / tilt.
+    h = int(hashlib.md5(g["label"].encode("utf-8")).hexdigest(), 16)
+    if size == "hero":
+        style = "width:100%;margin-bottom:24px;"
+    else:
+        w = [100, 95, 90][h % 3]
+        mb = [14, 24, 34][(h // 3) % 3]
+        align = "" if w == 100 else (
+            "margin-left:auto;" if (h // 9) % 2 else "margin-right:auto;")
+        tilt = [-0.9, 0, 0.8][(h // 27) % 3] if size == "mini" else 0
+        style = f"width:{w}%;margin-bottom:{mb}px;{align}"
+        if tilt:
+            style += f"transform:rotate({tilt}deg);"
+
     if g["img"]:
         cls = "crest" if g["img_type"] == "crest" else "photo"
         imgtag = (f'<img class="{cls}" src="{esc(g["img"])}" loading="lazy" '
@@ -436,20 +478,23 @@ def render_tile(g):
         f'<span class="lmeta">{esc(a["source"])} &middot; {when(a["date"])}</span></a>'
         for a in g["arts"][:12]
     )
-    return (
-        '<details class="tile"><summary>'
-        f'{thumb}'
-        f'<span class="tname">{esc(g["label"])}<small>{when(g["latest"])}</small></span>'
-        f'<span class="badge">{len(g["arts"])}</span></summary>'
-        f'<div class="links">{links}</div></details>'
-    )
+    name = (f'<span class="tname">{esc(g["label"])}'
+            f'<small>{when(g["latest"])}</small></span>')
+    badge = f'<span class="badge">{len(g["arts"])}</span>'
+
+    if size == "hero":
+        summary = f'<summary>{thumb}<span class="hrow">{name}{badge}</span></summary>'
+    else:
+        summary = f'<summary>{thumb}{name}{badge}</summary>'
+    return (f'<details class="tile {size}" style="{style}">{summary}'
+            f'<div class="links">{links}</div></details>')
 
 
 def render_column(title, sub, cls, groups):
     if not groups:
         body = '<div class="empty">Nothing new here yet.</div>'
     else:
-        body = "\n".join(render_tile(g) for g in groups[:60])
+        body = "\n".join(render_tile(g, i) for i, g in enumerate(groups[:60]))
     return (f'<section class="column {cls}"><div class="colhead">'
             f'<h2>{title}</h2><span class="sub">{sub}</span></div>{body}</section>')
 
@@ -514,6 +559,22 @@ def build_html(by_tier):
   .lhead {{ display:block; font-size:13px; line-height:1.4; color:var(--ink); }}
   .lmeta {{ display:block; font-size:11px; color:var(--muted); margin-top:2px; }}
   .empty {{ color:var(--muted); font-size:14px; text-align:center; padding:12px 0; }}
+  .tile:hover {{ box-shadow:0 16px 30px -8px rgba(var(--glow),.72),
+    0 2px 6px rgba(0,0,0,.07); }}
+
+  /* --- mosaic size variants (uneven patchwork) --- */
+  .tile.hero > summary {{ flex-direction:column; align-items:stretch; gap:0;
+    padding:0; }}
+  .tile.hero .thumb {{ width:100%; height:152px; border-radius:14px 14px 0 0;
+    font-size:44px; }}
+  .tile.hero .hrow {{ display:flex; align-items:center; gap:10px;
+    padding:12px 15px; }}
+  .tile.hero .tname {{ flex:1; font-size:16.5px; }}
+  .tile.hero .links {{ padding-left:16px; }}
+  .tile.mini > summary {{ padding:9px 12px; gap:10px; }}
+  .tile.mini .thumb {{ width:38px; height:38px; font-size:13px; border-radius:9px; }}
+  .tile.mini .tname {{ font-size:13.5px; }}
+  .tile.mini .links {{ padding-left:60px; }}
 </style>
 </head>
 <body>
